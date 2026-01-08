@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useContext, createContext } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Heart, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Heart, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 // --- APUKOMPONENTIT ---
 
@@ -560,6 +561,11 @@ const Navbar = () => {
     { id: 'contact', label: 'Yhteystiedot' },
   ];
 
+  const pageLinks = [
+    { to: '/laskutus', label: 'Laskutus', icon: FileText },
+    { to: '/tietosuoja', label: 'Tietosuoja', icon: Shield },
+  ];
+
   return (
     <nav className="sticky top-0 z-40 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -577,6 +583,16 @@ const Navbar = () => {
               >
                 {item.label}
               </button>
+            ))}
+            {pageLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="text-slate-600 hover:text-slate-900 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+              >
+                <link.icon size={14} />
+                {link.label}
+              </Link>
             ))}
             {/* Puhelinnumero navissa */}
             <a 
@@ -610,6 +626,17 @@ const Navbar = () => {
               >
                 {item.label}
               </button>
+            ))}
+            {pageLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="flex items-center gap-2 w-full text-left px-3 py-4 hover:bg-slate-50 text-slate-700 text-base font-medium uppercase"
+                onClick={() => setIsOpen(false)}
+              >
+                <link.icon size={16} />
+                {link.label}
+              </Link>
             ))}
           </div>
         </div>
@@ -871,9 +898,9 @@ const Footer = ({ hasFloatingNav }: { hasFloatingNav: boolean }) => (
     </div>
     <p className="mb-4">Rakennusliike Lambardos Oy - Laadukasta kalusteasennusta jo vuodesta 2011.</p>
     <div className="flex justify-center gap-4">
-       <a href="#" className="hover:text-green-600">Tietosuojalauseke</a>
+       <Link to="/tietosuoja" className="hover:text-green-600">Tietosuojalauseke</Link>
        <span>|</span>
-       <a href="#" className="hover:text-green-600">Evästeasetukset</a>
+       <Link to="/laskutus" className="hover:text-green-600">Laskutustiedot</Link>
     </div>
     <p className="mt-8 text-xs text-slate-400">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
   </footer>
