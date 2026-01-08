@@ -141,113 +141,100 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
   const obstacleX = useRef(110);
   const playerY = useRef(0);
   const velocity = useRef(0);
+  const statusRef = useRef('running');
   const [status, setStatus] = useState('running');
   const containerRef = useRef<HTMLDivElement>(null);
-  const [containerHeight, setContainerHeight] = useState(240);
   
   const playerRef = useRef<HTMLDivElement>(null);
   const obstacleRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>();
 
-  // Päivitä container korkeus responsiivisuutta varten
+  // Kiinteät arvot - ei skaalata
+  const JUMP_FORCE = 12;
+  const GRAVITY = 0.6;
+  const COLLISION_THRESHOLD = 30;
+
+  // Synkronoi status ref:iin
   useEffect(() => {
-    const updateHeight = () => {
-      if (containerRef.current) {
-        setContainerHeight(containerRef.current.offsetHeight);
-      }
-    };
-    updateHeight();
-    window.addEventListener('resize', updateHeight);
-    return () => window.removeEventListener('resize', updateHeight);
+    statusRef.current = status;
+  }, [status]);
+
+  // Hyppytoiminto - käyttää refsiä
+  const jump = useCallback(() => {
+    // Jump only if on ground and game is running
+    if (playerY.current <= 0 && statusRef.current === 'running') {
+        velocity.current = JUMP_FORCE;
+    }
   }, []);
 
-  // Skaalauskertoimet responsiivisuutta varten
-  const scale = containerHeight / 240;
-  const jumpForce = 11 * scale;
-  const gravity = 0.5 * scale;
-  const collisionThreshold = 25 * scale;
-
-  // Hyppytoiminto
-  const jump = (e?: React.PointerEvent | React.TouchEvent) => {
-    if (e) {
-        e.preventDefault();
-        e.stopPropagation(); 
-    }
-    
-    // Jump only if on ground and game is running
-    if (playerY.current <= 0 && status === 'running') {
-        velocity.current = jumpForce;
-    }
-  };
-
-  const animate = useCallback(() => {
-    if (!active) return;
-
-    if (status === 'running') {
-        // Liikuta estettä
-        obstacleX.current -= 0.4; 
-
-        // Reset loop
-        if (obstacleX.current < -20) {
-            obstacleX.current = 110;
-        }
-
-        // Fysiikka (Painovoima)
-        playerY.current += velocity.current;
-        if (playerY.current > 0) {
-            velocity.current -= gravity;
-        } else {
-            playerY.current = 0;
-            velocity.current = 0;
-        }
-
-        // Törmäys - Mahdoton voittaa (laajempi hitbox)
-        if (obstacleX.current < 22 && obstacleX.current > 10) {
-            if (playerY.current < collisionThreshold) { 
-                setStatus('crash');
-                setTimeout(() => {
-                    resetGame();
-                }, 2500);
-            }
-        }
-    }
-
-    // DOM päivitykset
-    if (obstacleRef.current) {
-        obstacleRef.current.style.left = `${obstacleX.current}%`;
-        
-        if (status === 'crash') {
-            obstacleRef.current.style.transform = 'rotate(-45deg)';
-        } else {
-            obstacleRef.current.style.transform = 'rotate(0deg)';
-        }
-    }
-    
-    if (playerRef.current) {
-        playerRef.current.style.bottom = `${playerY.current}px`;
-    }
-
-    if (status !== 'crash') {
-        requestRef.current = requestAnimationFrame(animate);
-    }
-  }, [active, status, gravity, collisionThreshold, jumpForce]);
-
-  const resetGame = () => {
+  const resetGame = useCallback(() => {
     obstacleX.current = 110;
     playerY.current = 0;
     velocity.current = 0;
+    statusRef.current = 'running';
     setStatus('running');
-    requestRef.current = requestAnimationFrame(animate);
-  };
+  }, []);
 
   useEffect(() => {
-    if (active) {
-        requestRef.current = requestAnimationFrame(animate);
-    }
-    return () => {
-        if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    if (!active) return;
+
+    let animationId: number;
+
+    const animate = () => {
+      if (statusRef.current === 'running') {
+          // Liikuta estettä
+          obstacleX.current -= 0.5; 
+
+          // Reset loop
+          if (obstacleX.current < -20) {
+              obstacleX.current = 110;
+          }
+
+          // Fysiikka (Painovoima)
+          playerY.current += velocity.current;
+          if (playerY.current > 0) {
+              velocity.current -= GRAVITY;
+          } else {
+              playerY.current = 0;
+              velocity.current = 0;
+          }
+
+          // Törmäys - Mahdoton voittaa
+          if (obstacleX.current < 22 && obstacleX.current > 10) {
+              if (playerY.current < COLLISION_THRESHOLD) { 
+                  statusRef.current = 'crash';
+                  setStatus('crash');
+                  setTimeout(() => {
+                      resetGame();
+                  }, 2500);
+              }
+          }
+      }
+
+      // DOM päivitykset
+      if (obstacleRef.current) {
+          obstacleRef.current.style.left = `${obstacleX.current}%`;
+          
+          if (statusRef.current === 'crash') {
+              obstacleRef.current.style.transform = 'rotate(-45deg)';
+          } else {
+              obstacleRef.current.style.transform = 'rotate(0deg)';
+          }
+      }
+      
+      if (playerRef.current) {
+          playerRef.current.style.bottom = `${playerY.current}px`;
+      }
+
+      animationId = requestAnimationFrame(animate);
     };
-  }, [active, animate]);
+
+    animationId = requestAnimationFrame(animate);
+    
+    return () => {
+        if (animationId) cancelAnimationFrame(animationId);
+    };
+  }, [active, resetGame]);
 
   return (
     <div 
