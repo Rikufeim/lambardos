@@ -1,14 +1,21 @@
 import React, { useState, useEffect, useRef, useCallback, useContext, createContext } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Heart, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import FollowingPointerDemo from "@/components/following-pointer-demo";
+import { FollowerPointerCard } from "@/components/ui/following-pointer";
+import CabinetFallGame from "@/components/CabinetFallGame";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 
 // --- APUKOMPONENTIT ---
 
 const Logo = () => (
-  <div className="flex items-center gap-2 font-bold text-xl md:text-2xl tracking-tighter cursor-pointer hover:opacity-90 transition-opacity">
-    <span className="text-slate-900">I</span>
-    <Heart className="w-6 h-6 text-red-600 fill-current" />
-    <span className="text-slate-900">KITCHEN</span>
+  <div className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
+    <img
+      src="/LAMBARDOS LOGO.png"
+      alt="Rakennusliike Lambardos"
+      className="h-12 w-auto object-contain"
+      loading="lazy"
+    />
   </div>
 );
 
@@ -291,8 +298,31 @@ interface DockItem {
 
 const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: boolean }) => {
   const [mouseX, setMouseX] = useState<number | null>(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState<{role: 'user' | 'bot', text: string}[]>([
+    { role: 'bot', text: 'Hei! Miten voin auttaa sinua tänään? 👋' }
+  ]);
+  const [inputValue, setInputValue] = useState('');
 
-  // Jos ei näkyvissä, piilotetaan ruudun alareunan alle
+  const handleSendMessage = () => {
+    if (!inputValue.trim()) return;
+    
+    setChatMessages(prev => [...prev, { role: 'user', text: inputValue }]);
+    setInputValue('');
+    
+    // Simulate bot response
+    setTimeout(() => {
+      const responses = [
+        'Kiitos viestistäsi! Otamme sinuun yhteyttä pian.',
+        'Voit myös soittaa meille numeroon 040 123 4567.',
+        'Lähetä tarjouspyyntö sähköpostilla: info@lambardos.fi',
+        'Palvelemme arkisin klo 7-16.',
+      ];
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      setChatMessages(prev => [...prev, { role: 'bot', text: randomResponse }]);
+    }, 1000);
+  };
+
   const containerStyle = {
     transform: isVisible ? 'translateX(-50%) translateY(0%)' : 'translateX(-50%) translateY(150%)',
     opacity: isVisible ? 1 : 0,
@@ -304,6 +334,66 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
       style={containerStyle}
       onMouseLeave={() => setMouseX(null)}
     >
+      {/* Chat Window */}
+      {chatOpen && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+          {/* Chat Header */}
+          <div className="bg-green-600 text-white px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+              <span className="font-bold text-sm">Lambardos Chat</span>
+            </div>
+            <button 
+              onClick={() => setChatOpen(false)}
+              className="text-white/80 hover:text-white transition-colors"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          
+          {/* Chat Messages */}
+          <div className="h-64 overflow-y-auto p-4 space-y-3 bg-slate-50">
+            {chatMessages.map((msg, idx) => (
+              <div 
+                key={idx} 
+                className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                <div 
+                  className={`max-w-[80%] px-3 py-2 rounded-xl text-sm ${
+                    msg.role === 'user' 
+                      ? 'bg-green-600 text-white rounded-br-sm' 
+                      : 'bg-white text-slate-700 border border-slate-200 rounded-bl-sm shadow-sm'
+                  }`}
+                >
+                  {msg.text}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Chat Input */}
+          <div className="p-3 bg-white border-t border-slate-100">
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="Kirjoita viesti..."
+                className="flex-1 px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              />
+              <button
+                onClick={handleSendMessage}
+                className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Dock Bar */}
       <div 
         className="flex items-center gap-2 bg-white/90 backdrop-blur-xl px-4 py-2 rounded-full border-2 border-green-500 shadow-2xl shadow-green-900/10 h-14"
         onMouseMove={(e) => setMouseX(e.clientX)}
@@ -312,7 +402,9 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
           <DockIcon 
             key={index} 
             mouseX={mouseX} 
-            {...item} 
+            {...item}
+            onChatToggle={item.href === 'chatbot' ? () => setChatOpen(!chatOpen) : () => setChatOpen(false)}
+            isChatOpen={chatOpen}
           />
         ))}
       </div>
@@ -320,8 +412,8 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
   );
 };
 
-const DockIcon = ({ mouseX, icon: Icon, href, title }: { mouseX: number | null; icon: React.ElementType; href: string; title: string }) => {
-  const ref = useRef<HTMLAnchorElement>(null);
+const DockIcon = ({ mouseX, icon: Icon, href, title, onChatToggle, isChatOpen }: { mouseX: number | null; icon: React.ElementType; href: string; title: string; onChatToggle?: () => void; isChatOpen?: boolean }) => {
+  const ref = useRef<HTMLButtonElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
@@ -334,12 +426,10 @@ const DockIcon = ({ mouseX, icon: Icon, href, title }: { mouseX: number | null; 
     const iconCenterX = rect.left + rect.width / 2;
     const distance = Math.abs(mouseX - iconCenterX);
     
-    // Lasketaan skaalauskerroin etäisyyden perusteella
     const maxDistance = 100;
-    const maxScale = 1.5; // Max suurennus
+    const maxScale = 1.5;
 
     if (distance < maxDistance) {
-      // Gaussian curve approximation for smooth scaling
       const val = (1 + Math.cos((distance / maxDistance) * Math.PI)) / 2;
       const s = 1 + val * (maxScale - 1);
       setScale(s);
@@ -348,26 +438,34 @@ const DockIcon = ({ mouseX, icon: Icon, href, title }: { mouseX: number | null; 
     }
   }, [mouseX]);
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Jos linkki alkaa #, se on sisäinen ankkuri -> preventDefault ja scrollaus
-    if (href.startsWith('#')) {
-      e.preventDefault();
+  const handleClick = () => {
+    // Always call onChatToggle if provided (closes chat for non-chat buttons, toggles for chat button)
+    if (onChatToggle) {
+      onChatToggle();
+    }
+    
+    // Handle navigation for non-chatbot items (instant jump, no smooth scroll)
+    if (href !== 'chatbot' && href.startsWith('#')) {
       if (href === '#hero' || href === '#top') {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo({ top: 0, behavior: 'instant' });
       } else {
-          document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+          document.querySelector(href)?.scrollIntoView({ behavior: 'instant' });
       }
     }
-    // Muuten annetaan selaimen hoitaa (mailto:, tel:, jne.)
   };
+
+  const isChat = href === 'chatbot';
 
   return (
     <div className="w-10 h-10 flex items-center justify-center relative">
-        <a 
-        href={href}
+        <button 
         ref={ref}
         onClick={handleClick}
-        className="absolute flex items-center justify-center rounded-full bg-white border border-green-100 hover:bg-green-50 transition-colors group cursor-pointer shadow-sm w-10 h-10 origin-bottom"
+        className={`absolute flex items-center justify-center rounded-full border transition-colors group cursor-pointer shadow-sm w-10 h-10 origin-bottom ${
+          isChat && isChatOpen 
+            ? 'bg-green-600 border-green-600' 
+            : 'bg-white border-green-100 hover:bg-green-50'
+        }`}
         style={{ 
             transform: `scale(${scale}) translateY(${scale > 1 ? (scale - 1) * -10 : 0}px)`, 
             transition: 'transform 0.1s ease-out'
@@ -382,219 +480,157 @@ const DockIcon = ({ mouseX, icon: Icon, href, title }: { mouseX: number | null; 
         </span>
         
         <Icon 
-            className="text-slate-600 group-hover:text-green-600 transition-colors w-5 h-5" 
+            className={`transition-colors w-5 h-5 ${
+              isChat && isChatOpen 
+                ? 'text-white' 
+                : 'text-slate-600 group-hover:text-green-600'
+            }`}
         />
-        </a>
+        </button>
     </div>
   );
 };
 
 // --- HERO PARALLAX COMPONENT (About Section) ---
 
-interface Product {
-  title: string;
-  thumbnail: string;
-}
-
-const HeroParallax = ({ products }: { products: Product[] }) => {
-  const firstRow = products.slice(0, 5);
-  const secondRow = products.slice(5, 10);
-  const thirdRow = products.slice(10, 15);
-  
-  const ref = useRef<HTMLDivElement>(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [elementTop, setElementTop] = useState(0);
-  const [clientHeight, setClientHeight] = useState(0);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    
-    // Alustetaan arvot heti
-    if (typeof window !== 'undefined') {
-        setElementTop(ref.current.offsetTop);
-        setClientHeight(window.innerHeight);
-    }
-    
-    const onResize = () => {
-      if (ref.current) {
-        setElementTop(ref.current.offsetTop);
-        setClientHeight(window.innerHeight);
-      }
-    };
-    
-    window.addEventListener("resize", onResize);
-    
-    const onScroll = () => {
-        requestAnimationFrame(() => {
-            setScrollY(window.scrollY);
-        });
-    };
-    
-    window.addEventListener("scroll", onScroll);
-    return () => {
-      window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, []);
-
-  const safeHeight = clientHeight || 800; 
-  const progress = Math.max(0, Math.min(1, (scrollY - elementTop + safeHeight) / (safeHeight * 2)));
-  
-  const translateX = (progress - 0.5) * 1000; 
-  const rotateX = 15 - progress * 15;
-  const opacity = Math.min(1, progress * 2);
-  const rotateZ = 10 - progress * 10;
+const HeroParallax = () => {
+  const slideData = [
+    {
+      title: "Keittiöasennus",
+      src: "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?q=80&w=2940&auto=format&fit=crop",
+    },
+    {
+      title: "Kalusteasennus",
+      src: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2832&auto=format&fit=crop",
+    },
+    {
+      title: "Komeroasennus",
+      src: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?q=80&w=2787&auto=format&fit=crop",
+    },
+    {
+      title: "WC-kalusteet",
+      src: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?q=80&w=2787&auto=format&fit=crop",
+    },
+  ];
 
   return (
     <div
-      ref={ref}
-      className="relative flex flex-col self-auto overflow-hidden antialiased py-24 bg-white"
-      style={{ perspective: "1000px" }}
-    >
-      <Header />
-      
-      <div
-        style={{
-            transform: `rotateX(${rotateX}deg) rotateZ(${rotateZ}deg)`,
-            opacity: isNaN(opacity) ? 0 : opacity,
-            willChange: 'transform, opacity'
-        }}
-      >
-        <div className="flex flex-row-reverse space-x-reverse space-x-10 mb-10">
-            {firstRow.map((product, idx) => (
-            <ProductCard
-                product={product}
-                translate={translateX}
-                key={"first-"+idx}
-            />
-            ))}
-        </div>
-        <div className="flex flex-row mb-10 space-x-10">
-            {secondRow.map((product, idx) => (
-            <ProductCard
-                product={product}
-                translate={-translateX} 
-                key={"second-"+idx}
-            />
-            ))}
-        </div>
-        <div className="flex flex-row-reverse space-x-reverse space-x-10">
-            {thirdRow.map((product, idx) => (
-            <ProductCard
-                product={product}
-                translate={translateX}
-                key={"third-"+idx}
-            />
-            ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const Header = () => {
-  return (
-    <div className="max-w-7xl relative mx-auto py-16 px-4 w-full left-0 top-0 text-center">
-      <h1 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tight mb-2">
-        TARINAMME
-      </h1>
-      <div className="w-32 h-1.5 bg-green-600 mx-auto rounded-full mb-12"></div>
-      
-      <div className="max-w-3xl mx-auto space-y-8 text-lg text-slate-600 font-medium leading-relaxed">
-        <p>
-          <strong className="text-slate-900">Rakennusliike Lambardos Oy</strong> ei ole vain yritys, se on perintö. 
-          Juuremme ulottuvat 1900-luvun alkupuoliskolle, jolloin puuseppä <strong className="text-slate-900">Juho Nurmi</strong> valmisti käsityönä kulutus- ja käyttötuotteita.
-        </p>
-        <p>
-          Nykymuotoinen yritys perustettiin vuonna 2011 jatkamaan tätä kunniakasta perinnettä. 
-          Vaikka työkalut ovat vaihtuneet vasaroista laser-mittoihin, periksiantamaton asenne ja rakkaus lajiin ovat säilyneet ennallaan.
-        </p>
-        <p className="pt-4 text-xl md:text-2xl text-slate-800 italic font-serif border-l-4 border-green-600 pl-6 text-left">
-          "Meille ei riitä 'ihan kiva'. Teemme työn niin, että voimme olla siitä ylpeitä vielä vuosienkin päästä."
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const ProductCard = ({ product, translate }: { product: Product; translate: number }) => {
-  return (
-    <div
-      style={{
-        transform: `translateX(${translate}px)`,
+      className="relative overflow-hidden antialiased py-16 md:py-24"
+      style={{ 
+        background: "radial-gradient(circle at 30% 70%, #ffffff70 0%, transparent 45%), radial-gradient(circle at 70% 30%, #8b5cf670 0%, transparent 45%), linear-gradient(0deg, #ffffff 0%, #001eff 50%, #ffffff 100%)",
+        filter: "brightness(1.1)",
       }}
-      className="group/product h-72 w-[24rem] relative flex-shrink-0"
     >
-      <div
-        className="block group-hover/product:shadow-2xl bg-slate-100 rounded-xl overflow-hidden h-full w-full border border-slate-200 relative"
-      >
-        {/* Placeholder for image - Empty as requested */}
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-300 font-bold uppercase tracking-widest text-2xl">
-            {/* Image Placeholder */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left side - Text content */}
+          <div className="text-left">
+            <h1 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tight mb-2 drop-shadow-sm">
+              TARINAMME
+            </h1>
+            <div className="w-32 h-1.5 bg-green-600 rounded-full mb-10"></div>
+            
+            <div className="space-y-6">
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
+                <p className="text-lg text-slate-900 font-semibold leading-relaxed drop-shadow-sm">
+                  <strong className="text-slate-950 font-bold">Rakennusliike Lambardos Oy</strong> ei ole vain yritys, se on perintö. 
+                  Juuremme ulottuvat 1900-luvun alkupuoliskolle, jolloin puuseppä <strong className="text-slate-950 font-bold">Juho Nurmi</strong> valmisti käsityönä kulutus- ja käyttötuotteita.
+                </p>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
+                <p className="text-lg text-slate-900 font-semibold leading-relaxed drop-shadow-sm">
+                  Nykymuotoinen yritys perustettiin vuonna 2011 jatkamaan tätä kunniakasta perinnettä. 
+                  Vaikka työkalut ovat vaihtuneet vasaroista laser-mittoihin, periksiantamaton asenne ja rakkaus lajiin ovat säilyneet ennallaan.
+                </p>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
+                <p className="text-xl md:text-2xl text-slate-950 italic font-serif border-l-4 border-green-600 pl-6 font-bold drop-shadow-sm">
+                  "Meille ei riitä 'ihan kiva'. Teemme työn niin, että voimme olla siitä ylpeitä vielä vuosienkin päästä."
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Right side - Image Carousel */}
+          <div className="relative">
+            <Carousel className="w-full" opts={{ loop: true }}>
+              <CarouselContent>
+                {slideData.map((slide, index) => (
+                  <CarouselItem key={index}>
+                    <div className="relative h-[400px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+                      <img 
+                        src={slide.src} 
+                        alt={slide.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute bottom-6 left-6 right-6">
+                        <h3 className="text-2xl md:text-3xl font-bold text-white drop-shadow-lg">
+                          {slide.title}
+                        </h3>
+                      </div>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-4 bg-white/80 hover:bg-white border-0 shadow-lg" />
+              <CarouselNext className="right-4 bg-white/80 hover:bg-white border-0 shadow-lg" />
+            </Carousel>
+          </div>
         </div>
-        
-        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/product:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
-        <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white font-bold transition-opacity duration-300 pointer-events-none">
-          {product.title}
-        </h2>
       </div>
     </div>
   );
 };
+
 
 // --- PÄÄSIVUSTON OSAT ---
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsOpen(false);
+  const navLinks = [
+    { label: "Etusivu", to: "#hero", icon: Home },
+    { label: "Laskutus", to: "/laskutus", icon: FileText },
+    { label: "Tietosuoja", to: "/tietosuoja", icon: Shield },
+  ];
+
+  const handleNav = (to: string) => {
+    if (to.startsWith("#")) {
+      const id = to.replace("#", "");
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    } else {
+      window.location.href = to;
     }
+    setIsOpen(false);
   };
-
-  const navItems = [
-    { id: 'project', label: 'Projektinhallinta' },
-    { id: 'pricing', label: 'Hinnoittelu' },
-    { id: 'contact', label: 'Yhteystiedot' },
-  ];
-
-  const pageLinks = [
-    { to: '/laskutus', label: 'Laskutus', icon: FileText },
-    { to: '/tietosuoja', label: 'Tietosuoja', icon: Shield },
-  ];
 
   return (
     <nav className="sticky top-0 z-40 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          <div onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          <div onClick={() => handleNav("#hero")}>
             <Logo />
           </div>
           
           <div className="hidden md:flex space-x-6 items-center">
-            {navItems.map((item) => (
+            {navLinks.map((link) => (
               <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-slate-600 hover:text-slate-900 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors"
-              >
-                {item.label}
-              </button>
-            ))}
-            {pageLinks.map((link) => (
-              <Link
                 key={link.to}
-                to={link.to}
-                className="text-slate-600 hover:text-slate-900 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+                onClick={() => handleNav(link.to)}
+                className="text-slate-600 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
               >
                 <link.icon size={14} />
                 {link.label}
-              </Link>
+              </button>
             ))}
-            {/* Puhelinnumero navissa */}
             <a 
               href="tel:0401234567"
               className="text-green-600 hover:text-green-700 font-mono font-black text-lg tracking-wide border border-green-600/20 bg-green-50 px-4 py-2 rounded transition-colors"
@@ -618,25 +654,15 @@ const Navbar = () => {
       {isOpen && (
         <div className="md:hidden bg-white border-t border-slate-200">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-            {navItems.map((item) => (
+            {navLinks.map((link) => (
               <button
-                key={item.id}
-                onClick={() => { scrollToSection(item.id); setIsOpen(false); }}
-                className="block w-full text-left px-3 py-4 hover:bg-slate-50 text-slate-700 text-base font-medium uppercase"
-              >
-                {item.label}
-              </button>
-            ))}
-            {pageLinks.map((link) => (
-              <Link
                 key={link.to}
-                to={link.to}
+                onClick={() => handleNav(link.to)}
                 className="flex items-center gap-2 w-full text-left px-3 py-4 hover:bg-slate-50 text-slate-700 text-base font-medium uppercase"
-                onClick={() => setIsOpen(false)}
               >
                 <link.icon size={16} />
                 {link.label}
-              </Link>
+              </button>
             ))}
           </div>
         </div>
@@ -645,13 +671,36 @@ const Navbar = () => {
   );
 };
 
-const HeroSection = () => (
-  // Wrapper luomaan taustan kortin alle.
-  <div className="bg-white w-full pb-12 pt-24 sm:pt-28">
+const HeroSection = () => {
+  const heroCtas = [
+    { id: "project", label: "Projektinhallinta" },
+    { id: "pricing", label: "Hinnoittelu" },
+    { id: "contact", label: "Yhteystiedot" },
+  ];
+
+  const jumpTo = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: "auto", block: "start" });
+    }
+  };
+
+  return (
+    // Wrapper luomaan taustan kortin alle.
+    <div
+      className="w-full pb-12 pt-24 sm:pt-28"
+      style={{
+        background:
+          "linear-gradient(180deg, #001eff 0%, #ffffff 30%), radial-gradient(ellipse 200% 100% at 50% 100%, #ffffff70 0%, transparent 50%), radial-gradient(ellipse 150% 80% at 50% 120%, #8b5cf660 0%, transparent 40%)",
+        filter: "brightness(1.1)",
+        width: "100%",
+        minHeight: "100vh",
+      }}
+    >
     <section 
       id="hero" 
       // Changed min-h-[40rem] to min-h-[35rem] and justify-center to justify-start to move content up
-      className="min-h-[35rem] rounded-[2.5rem] flex flex-col items-start justify-start bg-slate-50 antialiased relative overflow-hidden border border-slate-200 shadow-xl w-full"
+      className="min-h-[35rem] rounded-[2.5rem] flex flex-col items-start justify-start bg-slate-50 antialiased relative overflow-visible border border-slate-200 shadow-xl w-full"
     >
       <Spotlight fill="black" fillOpacity={0.05} />
       
@@ -659,6 +708,25 @@ const HeroSection = () => (
       <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-500/5 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 -translate-y-1/3 z-0"></div>
 
       <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none"></div>
+
+      <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex justify-center w-full px-6">
+        <div className="rounded-2xl bg-green-600/95 text-white shadow-xl shadow-green-900/15 border border-white/30 backdrop-blur-sm px-5 py-3.5 flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-semibold tracking-wide max-w-lg w-full">
+          {heroCtas.map((item, idx) => (
+            <React.Fragment key={item.id}>
+              <button
+                type="button"
+                onClick={() => jumpTo(item.id)}
+                className="transition-colors hover:text-white/90 focus:outline-none"
+              >
+                {item.label}
+              </button>
+              {idx < heroCtas.length - 1 && (
+                <span className="opacity-70 text-white/80">•</span>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
 
       {/* Content - Changed flex alignment and padding */}
       <div className="p-8 md:p-12 max-w-7xl mx-auto relative z-20 w-full flex flex-col items-start justify-start text-left pt-20 md:pt-32">
@@ -692,123 +760,102 @@ const HeroSection = () => (
       </div>
     </section>
   </div>
-);
+  );
+};
 
-// --- NEW GAME SECTION WITH 3D CARD ---
+// --- NEW GAME SECTION ---
 const GameSection = () => {
   return (
-    <section className="py-24 bg-white flex flex-col items-center justify-center relative overflow-hidden">
-       {/* Background decoration */}
-       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-green-50 via-white to-white pointer-events-none"></div>
+    <section 
+      className="py-16 md:py-24 flex flex-col items-center justify-center relative overflow-hidden"
+      style={{
+        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #ffffff50 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #00b42a40 0%, transparent 50%), linear-gradient(180deg, #ffffff 0%, #36cb00 50%, #ffffff 100%)",
+        filter: "brightness(1)",
+      }}
+    >
 
-       <div className="text-center mb-12 px-4 relative z-10">
+       <div className="text-center mb-8 md:mb-12 px-4 relative z-10">
           <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Miksi valita ammattilainen?</h2>
           <p className="text-slate-600 max-w-xl mx-auto">Koska tee-se-itse -projekteissa yllätykset ovat harvoin positiivisia. Me hoidamme homman kerralla maaliin.</p>
        </div>
        
-       <CardContainer className="inter-var">
-         <CardBody className="bg-white relative group/card border-slate-200 w-[90vw] max-w-[30rem] h-auto rounded-xl p-6 border shadow-2xl hover:shadow-green-500/10">
-           <CardItem translateZ={50} className="text-xl font-bold text-slate-900 mb-4 w-full text-center">
+       <div className="w-full max-w-5xl mx-auto px-4 relative z-10">
+         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
+           <div className="text-xl font-bold text-slate-900 py-4 px-6 text-center border-b border-slate-100 bg-slate-50">
              Meille ei käy näin
-           </CardItem>
-           <CardItem translateZ={100} className="w-full mt-4">
-             <div className="h-60 w-full rounded-xl overflow-hidden border border-slate-100 relative">
-               <HeroGameLoop active={true} />
-             </div>
-           </CardItem>
-           <div className="flex justify-between items-center mt-8">
-             <CardItem translateZ={20} as="p" className="text-slate-500 text-sm max-w-[200px]">
+           </div>
+           
+           <div className="w-full">
+             <CabinetFallGame 
+               allowReplay={true} 
+               buttonText="Kokeile asennusta"
+             />
+           </div>
+           
+           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 bg-slate-50 border-t border-slate-100">
+             <p className="text-slate-500 text-sm text-center sm:text-left">
                 Vältä turha säätö, päänvaiva ja kaatuvat kaapit.
-             </CardItem>
-             <CardItem 
-               translateZ={20} 
-               as="button" 
-               className="px-4 py-2 rounded-lg bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition-colors" 
+             </p>
+             <button 
+               className="px-6 py-3 rounded-lg bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap" 
                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
              >
                Ota yhteyttä
-             </CardItem>
+             </button>
            </div>
-         </CardBody>
-       </CardContainer>
+         </div>
+       </div>
     </section>
   )
 }
 
 const AboutSection = () => {
-  // Placeholder products for the parallax effect - Images removed as requested
-  const products = [
-    { title: "Historia", thumbnail: "" },
-    { title: "Perinteet", thumbnail: "" },
-    { title: "Laatu", thumbnail: "" },
-    { title: "Ammattitaito", thumbnail: "" },
-    { title: "Käsityö", thumbnail: "" },
-    { title: "Kokemus", thumbnail: "" },
-    { title: "Luotettavuus", thumbnail: "" },
-    { title: "Tarkkuus", thumbnail: "" },
-    { title: "Viimeistely", thumbnail: "" },
-    { title: "Asenne", thumbnail: "" },
-    { title: "Ylpeys", thumbnail: "" },
-    { title: "Vastuu", thumbnail: "" },
-    { title: "Takuu", thumbnail: "" },
-    { title: "Palvelu", thumbnail: "" },
-    { title: "Asiakas", thumbnail: "" },
-  ];
-
   return (
     <section id="about" className="relative">
-      <HeroParallax products={products} />
+      <HeroParallax />
     </section>
   );
 };
 
 const ProjectSection = () => (
-  <section id="project" className="py-24 bg-white border-t border-slate-100">
+  <section id="project" className="py-24 bg-white">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="grid lg:grid-cols-2 gap-16 items-center">
-         <div className="order-2 lg:order-1 relative">
-            <div className="absolute inset-0 bg-green-100 blur-3xl opacity-50 rounded-full"></div>
-            <div className="relative bg-white border border-slate-200 rounded-xl p-8 shadow-2xl space-y-4">
-               <div className="flex items-center gap-4 border-b border-slate-100 pb-4">
-                  <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="text-slate-400 text-xs font-mono ml-auto">LÄHDE Solutions v2.0</span>
-               </div>
-               <div className="space-y-3 font-mono text-sm">
-                  <div className="flex justify-between text-slate-600"><span className="text-green-600">✓</span> <span>Kohde: Asunto Oy Esimerkki</span> <span className="text-slate-400">10:00</span></div>
-                  <div className="flex justify-between text-slate-600"><span className="text-green-600">✓</span> <span>Tuntikirjaus: Asennus</span> <span className="text-slate-400">2h 30min</span></div>
-                  <div className="flex justify-between text-slate-600"><span className="text-green-600">✓</span> <span>Dokumentointi: Valmis</span> <span className="text-slate-400">OK</span></div>
-                  <div className="w-full bg-slate-100 h-2 rounded mt-4 overflow-hidden">
-                     <div className="w-3/4 bg-green-500 h-full"></div>
-                  </div>
-               </div>
-            </div>
-         </div>
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase mb-4">Moderni <span className="text-green-600">Projektinhallinta</span></h2>
+        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          Käytämme <span className="text-slate-900 font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä.
+        </p>
+      </div>
 
-         <div className="order-1 lg:order-2">
-            <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase mb-6">Moderni <br/><span className="text-green-600">Projektinhallinta</span></h2>
-            <p className="text-lg text-slate-600 mb-8">
-              Käytämme <span className="text-slate-900 font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä, eikä aika kulu puhelimessa roikkumiseen.
-            </p>
-            
-            <ul className="space-y-6">
+      <div className="grid lg:grid-cols-2 gap-12 items-center">
+         {/* Left - Feature list */}
+         <div>
+            <ul className="space-y-8">
                {[
                  { title: "Reaaliaikainen tieto", desc: "Työmaalla on aina ajantasaiset kuvat ja ohjeet." },
                  { title: "Tarkka seuranta", desc: "Aukoton historiatieto ja täsmälliset tuntikirjaukset." },
                  { title: "Turvallisuus edellä", desc: "Työturvallisuus- ja Valttikortit aina mukana." }
                ].map((item, idx) => (
                  <li key={idx} className="flex gap-4">
-                    <div className="w-12 h-12 rounded bg-slate-50 flex items-center justify-center shrink-0 border border-slate-200">
-                       <CheckCircle className="text-green-600" />
+                    <div className="w-12 h-12 rounded-lg bg-green-600 flex items-center justify-center shrink-0 shadow-lg shadow-green-600/20">
+                       <CheckCircle className="text-white" />
                     </div>
                     <div>
-                       <h4 className="text-slate-900 font-bold uppercase">{item.title}</h4>
-                       <p className="text-slate-500 text-sm">{item.desc}</p>
+                       <h4 className="text-slate-900 font-bold text-lg">{item.title}</h4>
+                       <p className="text-slate-500">{item.desc}</p>
                     </div>
                  </li>
                ))}
             </ul>
+         </div>
+
+         {/* Right - Card */}
+         <div className="relative flex justify-center">
+            <div className="absolute inset-0 bg-green-100 blur-3xl opacity-40 rounded-full"></div>
+            <div className="relative w-full">
+               <FollowingPointerDemo />
+            </div>
          </div>
       </div>
     </div>
@@ -903,6 +950,7 @@ const Footer = ({ hasFloatingNav }: { hasFloatingNav: boolean }) => (
        <Link to="/laskutus" className="hover:text-green-600">Laskutustiedot</Link>
     </div>
     <p className="mt-8 text-xs text-slate-400">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
+    <p className="mt-4 text-xs text-green-300/60">Ajattelevat sivut By Feim</p>
   </footer>
 );
 
@@ -922,9 +970,9 @@ const Index = () => {
   }, []);
 
   const floatingNavItems = [
-    { title: "Etusivu", icon: Home, href: "#hero" }, // Changed href to #hero to go top
-    { title: "Kotisivu", icon: User, href: "#about" }, 
-    { title: "Viesti", icon: MessageCircle, href: "#contact" }, 
+    { title: "Etusivu", icon: Home, href: "#hero" },
+    { title: "Yhteystiedot", icon: Phone, href: "#contact" }, 
+    { title: "Chatbot", icon: MessageCircle, href: "chatbot" }, 
   ];
 
   return (
