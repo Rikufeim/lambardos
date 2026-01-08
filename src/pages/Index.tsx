@@ -142,13 +142,33 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
   const playerY = useRef(0);
   const velocity = useRef(0);
   const [status, setStatus] = useState('running');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerHeight, setContainerHeight] = useState(240);
   
   const playerRef = useRef<HTMLDivElement>(null);
   const obstacleRef = useRef<HTMLDivElement>(null);
   const requestRef = useRef<number>();
 
+  // Päivitä container korkeus responsiivisuutta varten
+  useEffect(() => {
+    const updateHeight = () => {
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    window.addEventListener('resize', updateHeight);
+    return () => window.removeEventListener('resize', updateHeight);
+  }, []);
+
+  // Skaalauskertoimet responsiivisuutta varten
+  const scale = containerHeight / 240;
+  const jumpForce = 11 * scale;
+  const gravity = 0.5 * scale;
+  const collisionThreshold = 25 * scale;
+
   // Hyppytoiminto
-  const jump = (e?: React.PointerEvent) => {
+  const jump = (e?: React.PointerEvent | React.TouchEvent) => {
     if (e) {
         e.preventDefault();
         e.stopPropagation(); 
@@ -156,7 +176,7 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
     
     // Jump only if on ground and game is running
     if (playerY.current <= 0 && status === 'running') {
-        velocity.current = 11; // Hypyn voima
+        velocity.current = jumpForce;
     }
   };
 
@@ -164,8 +184,8 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
     if (!active) return;
 
     if (status === 'running') {
-        // Liikuta estettä (HIDASTETTU: 0.6 -> 0.35)
-        obstacleX.current -= 0.35; 
+        // Liikuta estettä
+        obstacleX.current -= 0.4; 
 
         // Reset loop
         if (obstacleX.current < -20) {
@@ -175,19 +195,19 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
         // Fysiikka (Painovoima)
         playerY.current += velocity.current;
         if (playerY.current > 0) {
-            velocity.current -= 0.5; // Painovoima
+            velocity.current -= gravity;
         } else {
             playerY.current = 0;
             velocity.current = 0;
         }
 
-        // Törmäys (Tiukka hitbox)
-        if (obstacleX.current < 20 && obstacleX.current > 12) {
-            if (playerY.current < 25) { 
+        // Törmäys - Mahdoton voittaa (laajempi hitbox)
+        if (obstacleX.current < 22 && obstacleX.current > 10) {
+            if (playerY.current < collisionThreshold) { 
                 setStatus('crash');
                 setTimeout(() => {
                     resetGame();
-                }, 2500); // Hieman pidempi tauko
+                }, 2500);
             }
         }
     }
@@ -196,9 +216,8 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
     if (obstacleRef.current) {
         obstacleRef.current.style.left = `${obstacleX.current}%`;
         
-        // KAATUMINEN PÄÄLLE
         if (status === 'crash') {
-            obstacleRef.current.style.transform = 'rotate(-45deg)'; // Kaatuu pelaajan päälle
+            obstacleRef.current.style.transform = 'rotate(-45deg)';
         } else {
             obstacleRef.current.style.transform = 'rotate(0deg)';
         }
@@ -211,7 +230,7 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
     if (status !== 'crash') {
         requestRef.current = requestAnimationFrame(animate);
     }
-  }, [active, status]);
+  }, [active, status, gravity, collisionThreshold, jumpForce]);
 
   const resetGame = () => {
     obstacleX.current = 110;
@@ -232,8 +251,10 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
 
   return (
     <div 
+        ref={containerRef}
         className="relative w-full h-full bg-white overflow-hidden flex flex-col items-center justify-center border-b-8 border-slate-200 cursor-pointer select-none touch-none"
         onPointerDown={jump}
+        onTouchStart={jump}
     >
         <div className="absolute inset-0 opacity-5 pointer-events-none" 
              style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}>
@@ -241,16 +262,15 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
         
         {/* Ohje */}
         {status === 'running' && playerY.current === 0 && (
-            <div className="absolute top-4 text-xs text-slate-400 font-mono animate-pulse pointer-events-none uppercase tracking-widest z-20">
+            <div className="absolute top-4 text-[10px] sm:text-xs text-slate-400 font-mono animate-pulse pointer-events-none uppercase tracking-widest z-20 px-2 text-center">
                 KLIKKAA HYPÄTÄKSESI
             </div>
         )}
         
         {status === 'crash' && (
-            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] animate-in zoom-in duration-200 pointer-events-none">
-                {/* Staattinen kolmio */}
-                <AlertTriangle className="w-8 h-8 text-red-600 mb-2 drop-shadow-md" />
-                <h2 className="text-xl font-black text-slate-900 uppercase tracking-tighter drop-shadow-xl mb-1 text-center">
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] animate-in zoom-in duration-200 pointer-events-none px-2">
+                <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 mb-2 drop-shadow-md" />
+                <h2 className="text-base sm:text-xl font-black text-slate-900 uppercase tracking-tighter drop-shadow-xl mb-1 text-center">
                     Meille ei käy näin
                 </h2>
                 <p className="text-slate-600 font-bold bg-white/90 px-3 py-0.5 rounded shadow-sm border border-slate-200 text-[10px]">GAME OVER</p>
@@ -258,15 +278,15 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
         )}
 
         {/* Pelaaja */}
-        <div ref={playerRef} className="absolute left-[15%] w-8 h-12 bg-green-500 rounded-lg border-2 border-green-600 shadow-xl z-10 pointer-events-none" style={{ bottom: 0 }}>
+        <div ref={playerRef} className="absolute left-[15%] w-6 h-10 sm:w-8 sm:h-12 bg-green-500 rounded-lg border-2 border-green-600 shadow-xl z-10 pointer-events-none" style={{ bottom: 0 }}>
             <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full"></div>
             <div className="absolute top-1 right-4 w-2 h-2 bg-white rounded-full"></div>
         </div>
 
         {/* Este (Kaappi) */}
-        <div ref={obstacleRef} className="absolute w-12 h-24 bg-amber-100 border-4 border-amber-800 rounded-sm shadow-2xl origin-bottom-left pointer-events-none transition-transform duration-300" style={{ left: '110%', bottom: 0 }}>
-            <div className="w-full h-1 bg-amber-800/20 mt-4"></div>
-            <div className="absolute top-10 right-2 w-1 h-8 bg-amber-200 rounded-full border border-amber-300"></div>
+        <div ref={obstacleRef} className="absolute w-10 h-20 sm:w-12 sm:h-24 bg-amber-100 border-4 border-amber-800 rounded-sm shadow-2xl origin-bottom-left pointer-events-none transition-transform duration-300" style={{ left: '110%', bottom: 0 }}>
+            <div className="w-full h-1 bg-amber-800/20 mt-3 sm:mt-4"></div>
+            <div className="absolute top-8 sm:top-10 right-1.5 sm:right-2 w-1 h-6 sm:h-8 bg-amber-200 rounded-full border border-amber-300"></div>
         </div>
 
         <div className="absolute bottom-0 w-full h-2 bg-slate-200 pointer-events-none"></div>
