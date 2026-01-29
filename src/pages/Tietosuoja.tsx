@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Home, Shield, ExternalLink, X, FileText } from 'lucide-react';
+import lambardosLogo from "@/assets/lambardos-logo.png";
 
 const Tietosuoja = () => {
   const [showPrivacyStatement, setShowPrivacyStatement] = useState(false);
@@ -22,9 +23,9 @@ const Tietosuoja = () => {
           <div className="flex justify-between h-20 items-center">
             <button
               onClick={() => handleNav("/")}
-              className="text-slate-900 font-black tracking-tight text-base sm:text-lg"
+              className="hover:opacity-90 transition-opacity"
             >
-              Rakennusliike Lambardos
+              <img src={lambardosLogo} alt="Rakennusliike Lambardos" className="h-12 w-auto object-contain" />
             </button>
             <div className="hidden md:flex space-x-6 items-center">
               {navLinks.map((link) => (
@@ -260,6 +261,9 @@ const Tietosuoja = () => {
 
       {/* Footer */}
       <footer className="bg-slate-50 border-t border-slate-200 py-8 text-center text-slate-500 text-sm">
+        <div className="flex justify-center mb-4">
+          <img src={lambardosLogo} alt="Rakennusliike Lambardos" className="h-10 w-auto object-contain opacity-80" />
+        </div>
         <p>© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
       </footer>
     </div>

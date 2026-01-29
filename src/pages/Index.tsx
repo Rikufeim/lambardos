@@ -5,13 +5,14 @@ import FollowingPointerDemo from "@/components/following-pointer-demo";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
 import CabinetFallGame from "@/components/CabinetFallGame";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import lambardosLogo from "@/assets/lambardos-logo.png";
 
 // --- APUKOMPONENTIT ---
 
 const Logo = () => (
   <div className="flex items-center cursor-pointer hover:opacity-90 transition-opacity">
     <img
-      src="/LAMBARDOS LOGO.png"
+      src={lambardosLogo}
       alt="Rakennusliike Lambardos"
       className="h-12 w-auto object-contain"
       loading="lazy"
