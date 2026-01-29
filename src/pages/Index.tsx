@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useContext, createContext } from 'react';
 import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FollowingPointerDemo from "@/components/following-pointer-demo";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
 import CabinetFallGame from "@/components/CabinetFallGame";
@@ -591,7 +591,6 @@ const HeroParallax = () => {
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
 
   const navLinks = [
     { label: "Etusivu", to: "#hero", icon: Home },
@@ -609,7 +608,7 @@ const Navbar = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } else {
-      navigate(to);
+      window.location.href = to;
     }
     setIsOpen(false);
   };
@@ -618,7 +617,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-40 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
-          <div onClick={() => handleNav("#hero")} className="cursor-pointer">
+          <div onClick={() => handleNav("#hero")}>
             <Logo />
           </div>
           

@@ -10,30 +10,34 @@ const Laskutus = () => {
     { label: "Tietosuoja", to: "/tietosuoja" },
   ];
 
+  const handleNav = (to: string) => {
+    window.location.href = to;
+  };
+
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
-            <Link
-              to="/"
+            <button
+              onClick={() => handleNav("/")}
               className="hover:opacity-90 transition-opacity"
             >
               <img src={lambardosLogo} alt="Rakennusliike Lambardos" className="h-12 w-auto object-contain" />
-            </Link>
+            </button>
             <div className="hidden md:flex space-x-6 items-center">
               {navLinks.map((link) => (
-                <Link
+                <button
                   key={link.to}
-                  to={link.to}
+                  onClick={() => handleNav(link.to)}
                   className="text-slate-600 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
                 >
                   {link.label === "Etusivu" && <Home size={14} />}
                   {link.label === "Laskutus" && <FileText size={14} />}
                   {link.label === "Tietosuoja" && <Shield size={14} />}
                   {link.label}
-                </Link>
+                </button>
               ))}
               <a 
                 href="tel:0401234567"
