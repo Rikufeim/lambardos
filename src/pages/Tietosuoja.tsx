@@ -16,9 +16,9 @@ const Tietosuoja = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900">
+    <div className="min-h-screen bg-gray-100 font-sans text-gray-900">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200">
+      <header className="sticky top-0 z-40 bg-gray-100/90 backdrop-blur-md border-b border-gray-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-20 items-center">
             <button
@@ -32,7 +32,7 @@ const Tietosuoja = () => {
                 <button
                   key={link.to}
                   onClick={() => handleNav(link.to)}
-                  className="text-slate-600 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+                  className="text-gray-700 hover:text-red-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
                 >
                   {link.label === "Etusivu" && <Home size={14} />}
                   {link.label === "Laskutus" && <FileText size={14} />}
@@ -42,31 +42,31 @@ const Tietosuoja = () => {
               ))}
               <a 
                 href="tel:0401234567"
-                className="text-green-600 hover:text-green-700 font-mono font-black text-lg tracking-wide border border-green-600/20 bg-green-50 px-4 py-2 rounded transition-colors"
+                className="text-gray-900 hover:text-red-600 font-mono font-black text-lg tracking-wide border border-gray-900/20 bg-gray-200 px-4 py-2 rounded transition-colors"
               >
                 0401234567
               </a>
             </div>
             <div className="md:hidden flex items-center gap-4">
-              <a href="tel:0401234567" className="text-green-600 font-bold text-sm">040 123 4567</a>
+              <a href="tel:0401234567" className="text-red-600 font-bold text-sm">040 123 4567</a>
             </div>
           </div>
         </div>
       </header>
 
       <main className="max-w-4xl mx-auto px-4 py-16 space-y-12">
-        <h1 className="text-4xl font-black text-slate-900 uppercase mb-8 flex items-center gap-4">
-          <Shield className="text-green-600" />
+        <h1 className="text-4xl font-black text-gray-900 uppercase mb-8 flex items-center gap-4">
+          <Shield className="text-red-600" />
           Tietosuoja
         </h1>
 
         {/* GDPR Info */}
         <section className="mb-12">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">
             GDPR – EU:n tietosuoja-asetus voimaan 25.5.2018
           </h2>
-          <div className="bg-slate-50 rounded-xl p-6 border border-slate-200 space-y-4">
-            <p className="text-slate-600">
+          <div className="bg-gray-50 rounded-xl p-6 border border-gray-300 space-y-4">
+            <p className="text-gray-700">
               Tietosuoja-asetus koskee kaikkia yrityksiä, jotka käsittelevät EU-kansalaisten henkilötietoja. 
               Yrityksessämme otetaan huomioon tietosuoja-asetuksen vaatimukset.
             </p>
@@ -76,7 +76,7 @@ const Tietosuoja = () => {
                 href="https://tietosuoja.fi/gdpr" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium transition-colors"
+                className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-medium transition-colors"
               >
                 <ExternalLink size={16} />
                 Lue lisää tietosuoja-asetuksesta Tietosuojavaltuutetun sivuilta
@@ -85,7 +85,7 @@ const Tietosuoja = () => {
                 href="https://eur-lex.europa.eu/legal-content/FI/TXT/?uri=CELEX%3A32016R0679" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 font-medium transition-colors"
+                className="inline-flex items-center gap-2 text-red-600 hover:text-red-700 font-medium transition-colors"
               >
                 <ExternalLink size={16} />
                 Koko tietosuoja-asetus
@@ -96,12 +96,12 @@ const Tietosuoja = () => {
 
         {/* Tietosuojaseloste Link */}
         <section className="mb-12">
-          <div className="bg-green-50 rounded-xl p-6 border border-green-200">
-            <p className="text-slate-700 mb-4">
+          <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+            <p className="text-gray-800 mb-4">
               Yrityksemme tietosuojaseloste on luettavissa{' '}
               <button 
                 onClick={() => setShowPrivacyStatement(true)}
-                className="text-green-600 hover:text-green-700 font-bold underline transition-colors"
+                className="text-red-600 hover:text-red-700 font-bold underline transition-colors"
               >
                 tästä
               </button>.
@@ -113,21 +113,21 @@ const Tietosuoja = () => {
       {/* Privacy Statement Modal */}
       {showPrivacyStatement && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl">
-            <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-slate-900">Asiakkaiden henkilötietojen käsittely</h2>
+          <div className="bg-gray-50 rounded-2xl max-w-4xl max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div className="sticky top-0 bg-gray-50 border-b border-gray-300 p-6 flex justify-between items-center">
+              <h2 className="text-2xl font-bold text-gray-900">Asiakkaiden henkilötietojen käsittely</h2>
               <button 
                 onClick={() => setShowPrivacyStatement(false)}
-                className="text-slate-500 hover:text-slate-700 transition-colors"
+                className="text-gray-600 hover:text-gray-800 transition-colors"
               >
                 <X size={24} />
               </button>
             </div>
             
-            <div className="p-6 space-y-6 text-slate-600">
+            <div className="p-6 space-y-6 text-gray-700">
               {/* Rekisterinpitäjä */}
-              <div className="bg-slate-50 rounded-lg p-4 border border-slate-200">
-                <h3 className="font-bold text-slate-900 mb-2">Rekisterinpitäjä:</h3>
+              <div className="bg-gray-100 rounded-lg p-4 border border-gray-300">
+                <h3 className="font-bold text-gray-900 mb-2">Rekisterinpitäjä:</h3>
                 <p>Rakennusliike Lambardos Oy</p>
                 <p>p. 045-2388663</p>
                 <p>info@lambardos.fi</p>
@@ -136,7 +136,7 @@ const Tietosuoja = () => {
 
               {/* Yleistä */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Yleistä henkilötietojen käsittelystä</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Yleistä henkilötietojen käsittelystä</h3>
                 <p>
                   EU:n yleistä tietosuoja-asetusta (General Data Protection Regulation, EU 2016/679) sovelletaan 25.5.2018 alkaen kaikissa EU:n jäsenmaissa.
                   Henkilötietoja tarvitaan asioinnin yhteydessä palvelun toteuttamiseksi eikä palvelua voida toteuttaa ilman näiden henkilötietojen antamista. 
@@ -146,7 +146,7 @@ const Tietosuoja = () => {
 
               {/* Käsiteltävät henkilötietoryhmät */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Käsiteltävät henkilötietoryhmät ja tietojenkäsittelyn oikeusperusteet</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Käsiteltävät henkilötietoryhmät ja tietojenkäsittelyn oikeusperusteet</h3>
                 <p className="mb-2">
                   Asiakasrekisteriin kerätään seuraavat henkilötiedot: Etu- ja sukunimi, osoite, puhelinnumero, sähköpostiosoite, asiakasnumero. 
                   Laskutusasiakkaiden tietoja käsitellään sen verran kuin on tarpeen luottokelpoisuuden varmistamiseksi.
@@ -170,7 +170,7 @@ const Tietosuoja = () => {
 
               {/* Henkilötietojen lähteet */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Henkilötietojen lähteet</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Henkilötietojen lähteet</h3>
                 <p>
                   Pääasiallinen henkilötietojen lähde on asiakas. Tietoja voidaan saada myös asiakkaan toimeksiannosta yhteistyökumppaneilta. 
                   Tietoja voidaan tarvittaessa hankkia yleisesti saatavilla olevista lähteistä kuten numeropalvelusta. 
@@ -180,7 +180,7 @@ const Tietosuoja = () => {
 
               {/* Tietojen siirto ja luovutus */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Tietojen siirto ja luovutus</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Tietojen siirto ja luovutus</h3>
                 <p className="mb-2">
                   Asiakasrekisteristä tietoja siirretään varmuuskopiointia varten palveluntarjoajan ylläpitämään palvelinympäristöön, joka täyttää EU-lainsäädännön vaatimukset. 
                   Lisäksi osa tiedoista on paperimuodossa kansioissa.
@@ -199,7 +199,7 @@ const Tietosuoja = () => {
 
               {/* Säilyttämisaika */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Henkilötietojen säilyttämisaika</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Henkilötietojen säilyttämisaika</h3>
                 <p className="mb-2">
                   Asiakasta koskevat tiedot säilytetään viiden vuoden ajan viimeisen tapahtuman kirjaamisen jälkeen. 
                   Tietoja kuitenkin voidaan säilyttää viiden vuoden jälkeen, mikäli sille on peruste. 
@@ -216,7 +216,7 @@ const Tietosuoja = () => {
 
               {/* Profilointi */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Profilointi ja automaattinen päätöksenteko</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Profilointi ja automaattinen päätöksenteko</h3>
                 <p>
                   Rekisterinpitäjä ei tee automaattiseen päätöksentekoon perustuvia päätöksiä eikä profilointia käsittelemiensä henkilötietojen perusteella.
                 </p>
@@ -224,7 +224,7 @@ const Tietosuoja = () => {
 
               {/* Rekisteröidyn oikeudet */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Rekisteröidyn (asiakkaan) oikeudet</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Rekisteröidyn (asiakkaan) oikeudet</h3>
                 <p className="mb-2">
                   Asiakkaalla on oikeus tarkastaa hänestä tallennetut tiedot esittämällä tarkastuspyyntö toimittamalla allekirjoitettu tai sitä vastaavalla tavalla varmennettu asiakirja kirjallisesti tai sähköisesti rekisterinpitäjälle. 
                   Rekisterinpitäjä toimittaa edellä mainitut tiedot asiakkaalle 30 päivän kuluessa tarkastuspyynnön esittämisestä, ellei perustellusta syystä tietojen toimittamiseen tarvita pidempää aikaa. 
@@ -245,13 +245,13 @@ const Tietosuoja = () => {
 
               {/* Lisätietoja */}
               <div>
-                <h3 className="font-bold text-slate-900 mb-2">Lisätietoja</h3>
+                <h3 className="font-bold text-gray-900 mb-2">Lisätietoja</h3>
                 <p>
                   Rekisterinpitäjä pidättää oikeuden tämän selosteen tietojen muuttamiseen ilman erillistä ilmoitusta ja suosittelee tarkastamaan selosteen ajoittain.
                 </p>
               </div>
 
-              <div className="text-sm text-slate-400 pt-4 border-t border-slate-200">
+              <div className="text-sm text-gray-500 pt-4 border-t border-gray-300">
                 versio 25.05.2018/0.1
               </div>
             </div>
@@ -260,7 +260,7 @@ const Tietosuoja = () => {
       )}
 
       {/* Footer */}
-      <footer className="bg-slate-50 border-t border-slate-200 py-8 text-center text-slate-500 text-sm">
+      <footer className="bg-gray-200 border-t border-gray-300 py-8 text-center text-gray-600 text-sm">
         <div className="flex justify-center mb-4">
           <img src={lambardosLogo} alt="Rakennusliike Lambardos" className="h-10 w-auto object-contain opacity-80" />
         </div>
