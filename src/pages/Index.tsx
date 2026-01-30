@@ -248,7 +248,7 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
   return (
     <div 
         ref={containerRef}
-        className="relative w-full h-full bg-white overflow-hidden flex flex-col items-center justify-center border-b-8 border-slate-200 cursor-pointer select-none touch-none"
+        className="relative w-full h-full bg-gray-100 overflow-hidden flex flex-col items-center justify-center border-b-8 border-gray-300 cursor-pointer select-none touch-none"
         onPointerDown={jump}
         onTouchStart={jump}
     >
@@ -258,23 +258,23 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
         
         {/* Ohje */}
         {status === 'running' && playerY.current === 0 && (
-            <div className="absolute top-4 text-[10px] sm:text-xs text-slate-400 font-mono animate-pulse pointer-events-none uppercase tracking-widest z-20 px-2 text-center">
+            <div className="absolute top-4 text-[10px] sm:text-xs text-gray-500 font-mono animate-pulse pointer-events-none uppercase tracking-widest z-20 px-2 text-center">
                 KLIKKAA HYPÄTÄKSESI
             </div>
         )}
         
         {status === 'crash' && (
-            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white/40 backdrop-blur-[2px] animate-in zoom-in duration-200 pointer-events-none px-2">
+            <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-gray-100/40 backdrop-blur-[2px] animate-in zoom-in duration-200 pointer-events-none px-2">
                 <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 text-red-600 mb-2 drop-shadow-md" />
-                <h2 className="text-base sm:text-xl font-black text-slate-900 uppercase tracking-tighter drop-shadow-xl mb-1 text-center">
+                <h2 className="text-base sm:text-xl font-black text-gray-900 uppercase tracking-tighter drop-shadow-xl mb-1 text-center">
                     Meille ei käy näin
                 </h2>
-                <p className="text-slate-600 font-bold bg-white/90 px-3 py-0.5 rounded shadow-sm border border-slate-200 text-[10px]">GAME OVER</p>
+                <p className="text-gray-700 font-bold bg-gray-100/90 px-3 py-0.5 rounded shadow-sm border border-gray-300 text-[10px]">GAME OVER</p>
             </div>
         )}
 
         {/* Pelaaja */}
-        <div ref={playerRef} className="absolute left-[15%] w-6 h-10 sm:w-8 sm:h-12 bg-green-500 rounded-lg border-2 border-green-600 shadow-xl z-10 pointer-events-none" style={{ bottom: 0 }}>
+        <div ref={playerRef} className="absolute left-[15%] w-6 h-10 sm:w-8 sm:h-12 bg-red-600 rounded-lg border-2 border-red-700 shadow-xl z-10 pointer-events-none" style={{ bottom: 0 }}>
             <div className="absolute top-1 right-1 w-2 h-2 bg-white rounded-full"></div>
             <div className="absolute top-1 right-4 w-2 h-2 bg-white rounded-full"></div>
         </div>
@@ -285,7 +285,7 @@ const HeroGameLoop = ({ active }: { active: boolean }) => {
             <div className="absolute top-8 sm:top-10 right-1.5 sm:right-2 w-1 h-6 sm:h-8 bg-amber-200 rounded-full border border-amber-300"></div>
         </div>
 
-        <div className="absolute bottom-0 w-full h-2 bg-slate-200 pointer-events-none"></div>
+        <div className="absolute bottom-0 w-full h-2 bg-gray-300 pointer-events-none"></div>
     </div>
   );
 };
@@ -337,11 +337,11 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
     >
       {/* Chat Window */}
       {chatOpen && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 w-80 bg-gray-50 rounded-2xl shadow-2xl border border-gray-300 overflow-hidden animate-in slide-in-from-bottom-4 duration-300">
           {/* Chat Header */}
-          <div className="bg-green-600 text-white px-4 py-3 flex items-center justify-between">
+          <div className="bg-gray-900 text-white px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-300 rounded-full animate-pulse"></div>
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
               <span className="font-bold text-sm">Lambardos Chat</span>
             </div>
             <button 
@@ -353,7 +353,7 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
           </div>
           
           {/* Chat Messages */}
-          <div className="h-64 overflow-y-auto p-4 space-y-3 bg-slate-50">
+          <div className="h-64 overflow-y-auto p-4 space-y-3 bg-gray-100">
             {chatMessages.map((msg, idx) => (
               <div 
                 key={idx} 
@@ -362,8 +362,8 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
                 <div 
                   className={`max-w-[80%] px-3 py-2 rounded-xl text-sm ${
                     msg.role === 'user' 
-                      ? 'bg-green-600 text-white rounded-br-sm' 
-                      : 'bg-white text-slate-700 border border-slate-200 rounded-bl-sm shadow-sm'
+                      ? 'bg-red-600 text-white rounded-br-sm' 
+                      : 'bg-white text-gray-700 border border-gray-300 rounded-bl-sm shadow-sm'
                   }`}
                 >
                   {msg.text}
@@ -373,7 +373,7 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
           </div>
           
           {/* Chat Input */}
-          <div className="p-3 bg-white border-t border-slate-100">
+          <div className="p-3 bg-gray-50 border-t border-gray-200">
             <div className="flex gap-2">
               <input
                 type="text"
@@ -381,11 +381,11 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                 placeholder="Kirjoita viesti..."
-                className="flex-1 px-3 py-2 text-sm bg-white border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="flex-1 px-3 py-2 text-sm bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
               />
               <button
                 onClick={handleSendMessage}
-                className="px-3 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="px-3 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
               >
                 <ChevronRight size={18} />
               </button>
@@ -396,7 +396,7 @@ const FloatingDock = ({ items, isVisible }: { items: DockItem[]; isVisible: bool
 
       {/* Dock Bar */}
       <div 
-        className="flex items-center gap-2 bg-white/90 backdrop-blur-xl px-4 py-2 rounded-full border-2 border-green-500 shadow-2xl shadow-green-900/10 h-14"
+        className="flex items-center gap-2 bg-gray-50/90 backdrop-blur-xl px-4 py-2 rounded-full border-2 border-gray-900 shadow-2xl shadow-gray-900/10 h-14"
         onMouseMove={(e) => setMouseX(e.clientX)}
       >
         {items.map((item, index) => (
@@ -464,8 +464,8 @@ const DockIcon = ({ mouseX, icon: Icon, href, title, onChatToggle, isChatOpen }:
         onClick={handleClick}
         className={`absolute flex items-center justify-center rounded-full border transition-colors group cursor-pointer shadow-sm w-10 h-10 origin-bottom ${
           isChat && isChatOpen 
-            ? 'bg-green-600 border-green-600' 
-            : 'bg-white border-green-100 hover:bg-green-50'
+            ? 'bg-red-600 border-red-600' 
+            : 'bg-gray-50 border-gray-300 hover:bg-red-50'
         }`}
         style={{ 
             transform: `scale(${scale}) translateY(${scale > 1 ? (scale - 1) * -10 : 0}px)`, 
@@ -474,7 +474,7 @@ const DockIcon = ({ mouseX, icon: Icon, href, title, onChatToggle, isChatOpen }:
         >
         {/* Tooltip */}
         <span 
-            className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[10px] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
+            className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none"
             style={{ transform: `scale(${1/scale})` }}
         >
             {title}
@@ -484,7 +484,7 @@ const DockIcon = ({ mouseX, icon: Icon, href, title, onChatToggle, isChatOpen }:
             className={`transition-colors w-5 h-5 ${
               isChat && isChatOpen 
                 ? 'text-white' 
-                : 'text-slate-600 group-hover:text-green-600'
+                : 'text-gray-700 group-hover:text-red-600'
             }`}
         />
         </button>
@@ -518,7 +518,7 @@ const HeroParallax = () => {
     <div
       className="relative overflow-hidden antialiased py-16 md:py-24"
       style={{ 
-        background: "radial-gradient(circle at 30% 70%, #ffffff70 0%, transparent 45%), radial-gradient(circle at 70% 30%, #8b5cf670 0%, transparent 45%), linear-gradient(0deg, #ffffff 0%, #001eff 50%, #ffffff 100%)",
+        background: "radial-gradient(circle at 30% 70%, #f5f5f570 0%, transparent 45%), radial-gradient(circle at 70% 30%, #dc262670 0%, transparent 45%), linear-gradient(0deg, #f5f5f5 0%, #dc2626 50%, #f5f5f5 100%)",
         filter: "brightness(1.1)",
       }}
     >
@@ -526,28 +526,28 @@ const HeroParallax = () => {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left side - Text content */}
           <div className="text-left">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 uppercase tracking-tight mb-2 drop-shadow-sm">
+            <h1 className="text-4xl md:text-5xl font-black text-gray-900 uppercase tracking-tight mb-2 drop-shadow-sm">
               TARINAMME
             </h1>
-            <div className="w-32 h-1.5 bg-green-600 rounded-full mb-10"></div>
+            <div className="w-32 h-1.5 bg-red-600 rounded-full mb-10"></div>
             
             <div className="space-y-6">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
-                <p className="text-lg text-slate-900 font-semibold leading-relaxed drop-shadow-sm">
-                  <strong className="text-slate-950 font-bold">Rakennusliike Lambardos Oy</strong> ei ole vain yritys, se on perintö. 
-                  Juuremme ulottuvat 1900-luvun alkupuoliskolle, jolloin puuseppä <strong className="text-slate-950 font-bold">Juho Nurmi</strong> valmisti käsityönä kulutus- ja käyttötuotteita.
+              <div className="bg-gray-50/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200/50">
+                <p className="text-lg text-gray-900 font-semibold leading-relaxed drop-shadow-sm">
+                  <strong className="text-gray-950 font-bold">Rakennusliike Lambardos Oy</strong> ei ole vain yritys, se on perintö. 
+                  Juuremme ulottuvat 1900-luvun alkupuoliskolle, jolloin puuseppä <strong className="text-gray-950 font-bold">Juho Nurmi</strong> valmisti käsityönä kulutus- ja käyttötuotteita.
                 </p>
               </div>
               
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
-                <p className="text-lg text-slate-900 font-semibold leading-relaxed drop-shadow-sm">
+              <div className="bg-gray-50/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200/50">
+                <p className="text-lg text-gray-900 font-semibold leading-relaxed drop-shadow-sm">
                   Nykymuotoinen yritys perustettiin vuonna 2011 jatkamaan tätä kunniakasta perinnettä. 
                   Vaikka työkalut ovat vaihtuneet vasaroista laser-mittoihin, periksiantamaton asenne ja rakkaus lajiin ovat säilyneet ennallaan.
                 </p>
               </div>
               
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/50">
-                <p className="text-xl md:text-2xl text-slate-950 italic font-serif border-l-4 border-green-600 pl-6 font-bold drop-shadow-sm">
+              <div className="bg-gray-50/80 backdrop-blur-sm rounded-xl p-6 shadow-lg border border-gray-200/50">
+                <p className="text-xl md:text-2xl text-gray-950 italic font-serif border-l-4 border-red-600 pl-6 font-bold drop-shadow-sm">
                   "Meille ei riitä 'ihan kiva'. Teemme työn niin, että voimme olla siitä ylpeitä vielä vuosienkin päästä."
                 </p>
               </div>
@@ -576,8 +576,8 @@ const HeroParallax = () => {
                   </CarouselItem>
                 ))}
               </CarouselContent>
-              <CarouselPrevious className="left-4 bg-white/80 hover:bg-white border-0 shadow-lg" />
-              <CarouselNext className="right-4 bg-white/80 hover:bg-white border-0 shadow-lg" />
+              <CarouselPrevious className="left-4 bg-gray-50/80 hover:bg-gray-100 border-0 shadow-lg" />
+              <CarouselNext className="right-4 bg-gray-50/80 hover:bg-gray-100 border-0 shadow-lg" />
             </Carousel>
           </div>
         </div>
@@ -614,7 +614,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <nav className="sticky top-0 z-40 transition-all duration-300 bg-gray-100/90 backdrop-blur-md border-b border-gray-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div onClick={() => handleNav("#hero")}>
@@ -626,7 +626,7 @@ const Navbar = () => {
               <button
                 key={link.to}
                 onClick={() => handleNav(link.to)}
-                className="text-slate-600 hover:text-green-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
+                className="text-gray-700 hover:text-red-600 text-sm font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
               >
                 <link.icon size={14} />
                 {link.label}
@@ -634,17 +634,17 @@ const Navbar = () => {
             ))}
             <a 
               href="tel:0401234567"
-              className="text-green-600 hover:text-green-700 font-mono font-black text-lg tracking-wide border border-green-600/20 bg-green-50 px-4 py-2 rounded transition-colors"
+              className="text-gray-900 hover:text-red-600 font-mono font-black text-lg tracking-wide border border-gray-900/20 bg-gray-200 px-4 py-2 rounded transition-colors"
             >
               0401234567
             </a>
           </div>
 
           <div className="md:hidden flex items-center gap-4">
-            <a href="tel:0401234567" className="text-green-600 font-bold text-sm">040 123 4567</a>
+            <a href="tel:0401234567" className="text-red-600 font-bold text-sm">040 123 4567</a>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-slate-600 hover:text-slate-900 focus:outline-none"
+              className="text-gray-700 hover:text-gray-900 focus:outline-none"
             >
               {isOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -653,13 +653,13 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white border-t border-slate-200">
+        <div className="md:hidden bg-gray-100 border-t border-gray-300">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <button
                 key={link.to}
                 onClick={() => handleNav(link.to)}
-                className="flex items-center gap-2 w-full text-left px-3 py-4 hover:bg-slate-50 text-slate-700 text-base font-medium uppercase"
+                className="flex items-center gap-2 w-full text-left px-3 py-4 hover:bg-gray-200 text-gray-700 text-base font-medium uppercase"
               >
                 <link.icon size={16} />
                 {link.label}
@@ -692,7 +692,7 @@ const HeroSection = () => {
       className="w-full pb-12 pt-24 sm:pt-28"
       style={{
         background:
-          "linear-gradient(180deg, #001eff 0%, #ffffff 30%), radial-gradient(ellipse 200% 100% at 50% 100%, #ffffff70 0%, transparent 50%), radial-gradient(ellipse 150% 80% at 50% 120%, #8b5cf660 0%, transparent 40%)",
+          "linear-gradient(180deg, #dc2626 0%, #f5f5f5 30%), radial-gradient(ellipse 200% 100% at 50% 100%, #f5f5f570 0%, transparent 50%), radial-gradient(ellipse 150% 80% at 50% 120%, #1a1a1a60 0%, transparent 40%)",
         filter: "brightness(1.1)",
         width: "100%",
         minHeight: "100vh",
@@ -701,28 +701,28 @@ const HeroSection = () => {
     <section 
       id="hero" 
       // Changed min-h-[40rem] to min-h-[35rem] and justify-center to justify-start to move content up
-      className="min-h-[35rem] rounded-[2.5rem] flex flex-col items-start justify-start bg-slate-50 antialiased relative overflow-visible border border-slate-200 shadow-xl w-full"
+      className="min-h-[35rem] rounded-[2.5rem] flex flex-col items-start justify-start bg-gray-100 antialiased relative overflow-visible border border-gray-300 shadow-xl w-full"
     >
       <Spotlight fill="black" fillOpacity={0.05} />
       
       {/* Punainen sävy vasemmassa yläkulmassa */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-500/5 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 -translate-y-1/3 z-0"></div>
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 -translate-y-1/3 z-0"></div>
 
-      <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-slate-50 via-slate-50/80 to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-gray-100 via-gray-100/80 to-transparent z-10 pointer-events-none"></div>
 
       <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex justify-center w-full px-6">
-        <div className="rounded-2xl bg-green-600/95 text-white shadow-xl shadow-green-900/15 border border-white/30 backdrop-blur-sm px-5 py-3.5 flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-semibold tracking-wide max-w-lg w-full">
+        <div className="rounded-2xl bg-gray-900/95 text-white shadow-xl shadow-gray-900/15 border border-red-500/30 backdrop-blur-sm px-5 py-3.5 flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-semibold tracking-wide max-w-lg w-full">
           {heroCtas.map((item, idx) => (
             <React.Fragment key={item.id}>
               <button
                 type="button"
                 onClick={() => jumpTo(item.id)}
-                className="transition-colors hover:text-white/90 focus:outline-none"
+                className="transition-colors hover:text-red-400 focus:outline-none"
               >
                 {item.label}
               </button>
               {idx < heroCtas.length - 1 && (
-                <span className="opacity-70 text-white/80">•</span>
+                <span className="opacity-70 text-red-500/80">•</span>
               )}
             </React.Fragment>
           ))}
@@ -732,19 +732,19 @@ const HeroSection = () => {
       {/* Content - Changed flex alignment and padding */}
       <div className="p-8 md:p-12 max-w-7xl mx-auto relative z-20 w-full flex flex-col items-start justify-start text-left pt-20 md:pt-32">
         
-        <h1 className="text-3xl md:text-5xl font-bold text-slate-900 leading-tight">
+        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
           Ammattilaisen kädenjälki <br />
-          <span className="text-green-600 relative z-10">näkyy lopputuloksessa.</span>
+          <span className="text-red-600 relative z-10">näkyy lopputuloksessa.</span>
         </h1>
         
-        <p className="text-slate-600 text-lg max-w-md leading-relaxed mt-6">
+        <p className="text-gray-700 text-lg max-w-md leading-relaxed mt-6">
            Toteutamme keittiö-, wc- ja komerokalusteiden asennukset uudis- ja perusparannuskohteisiin.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-start items-center mt-10">
           <button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-4 bg-green-600 hover:bg-green-700 text-white font-bold rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-md flex items-center gap-2 group shadow-lg"
+            className="px-8 py-4 bg-gray-900 hover:bg-red-600 text-white font-bold rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-md flex items-center gap-2 group shadow-lg border border-red-600"
           >
             Pyydä tarjous
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -752,9 +752,9 @@ const HeroSection = () => {
           
           <button
              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-             className="flex items-center gap-2 px-6 py-4 text-slate-900 font-medium hover:text-green-600 transition-colors"
+             className="flex items-center gap-2 px-6 py-4 text-gray-900 font-medium hover:text-red-600 transition-colors"
           >
-             <CheckCircle className="text-slate-900" size={20} />
+             <CheckCircle className="text-gray-900" size={20} />
              <span>Lue lisää meistä</span>
           </button>
         </div>
@@ -770,19 +770,19 @@ const GameSection = () => {
     <section 
       className="py-16 md:py-24 flex flex-col items-center justify-center relative overflow-hidden"
       style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #ffffff50 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #00b42a40 0%, transparent 50%), linear-gradient(180deg, #ffffff 0%, #36cb00 50%, #ffffff 100%)",
+        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #f5f5f550 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #dc262640 0%, transparent 50%), linear-gradient(180deg, #f5f5f5 0%, #dc2626 50%, #f5f5f5 100%)",
         filter: "brightness(1)",
       }}
     >
 
        <div className="text-center mb-8 md:mb-12 px-4 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Miksi valita ammattilainen?</h2>
-          <p className="text-slate-600 max-w-xl mx-auto">Koska tee-se-itse -projekteissa yllätykset ovat harvoin positiivisia. Me hoidamme homman kerralla maaliin.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Miksi valita ammattilainen?</h2>
+          <p className="text-gray-700 max-w-xl mx-auto">Koska tee-se-itse -projekteissa yllätykset ovat harvoin positiivisia. Me hoidamme homman kerralla maaliin.</p>
        </div>
        
        <div className="w-full max-w-5xl mx-auto px-4 relative z-10">
-         <div className="bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden">
-           <div className="text-xl font-bold text-slate-900 py-4 px-6 text-center border-b border-slate-100 bg-slate-50">
+         <div className="bg-gray-50 rounded-2xl border border-gray-300 shadow-xl overflow-hidden">
+           <div className="text-xl font-bold text-gray-900 py-4 px-6 text-center border-b border-gray-200 bg-gray-100">
              Meille ei käy näin
            </div>
            
@@ -793,12 +793,12 @@ const GameSection = () => {
              />
            </div>
            
-           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 bg-slate-50 border-t border-slate-100">
-             <p className="text-slate-500 text-sm text-center sm:text-left">
+           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 bg-gray-100 border-t border-gray-200">
+             <p className="text-gray-600 text-sm text-center sm:text-left">
                 Vältä turha säätö, päänvaiva ja kaatuvat kaapit.
              </p>
              <button 
-               className="px-6 py-3 rounded-lg bg-slate-900 text-white text-sm font-bold hover:bg-slate-800 transition-colors whitespace-nowrap" 
+               className="px-6 py-3 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-red-600 transition-colors whitespace-nowrap border border-red-600" 
                onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
              >
                Ota yhteyttä
@@ -819,13 +819,13 @@ const AboutSection = () => {
 };
 
 const ProjectSection = () => (
-  <section id="project" className="py-24 bg-white">
+  <section id="project" className="py-24 bg-gray-100">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       {/* Header */}
       <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-5xl font-black text-slate-900 uppercase mb-4">Moderni <span className="text-green-600">Projektinhallinta</span></h2>
-        <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-          Käytämme <span className="text-slate-900 font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä.
+        <h2 className="text-3xl md:text-5xl font-black text-gray-900 uppercase mb-4">Moderni <span className="text-red-600">Projektinhallinta</span></h2>
+        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
+          Käytämme <span className="text-gray-900 font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä.
         </p>
       </div>
 
@@ -839,12 +839,12 @@ const ProjectSection = () => (
                  { title: "Turvallisuus edellä", desc: "Työturvallisuus- ja Valttikortit aina mukana." }
                ].map((item, idx) => (
                  <li key={idx} className="flex gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-green-600 flex items-center justify-center shrink-0 shadow-lg shadow-green-600/20">
+                    <div className="w-12 h-12 rounded-lg bg-red-600 flex items-center justify-center shrink-0 shadow-lg shadow-red-600/20">
                        <CheckCircle className="text-white" />
                     </div>
                     <div>
-                       <h4 className="text-slate-900 font-bold text-lg">{item.title}</h4>
-                       <p className="text-slate-500">{item.desc}</p>
+                       <h4 className="text-gray-900 font-bold text-lg">{item.title}</h4>
+                       <p className="text-gray-600">{item.desc}</p>
                     </div>
                  </li>
                ))}
@@ -853,7 +853,7 @@ const ProjectSection = () => (
 
          {/* Right - Card */}
          <div className="relative flex justify-center">
-            <div className="absolute inset-0 bg-green-100 blur-3xl opacity-40 rounded-full"></div>
+            <div className="absolute inset-0 bg-red-100 blur-3xl opacity-40 rounded-full"></div>
             <div className="relative w-full">
                <FollowingPointerDemo />
             </div>
@@ -864,73 +864,73 @@ const ProjectSection = () => (
 );
 
 const PricingSection = () => (
-  <section id="pricing" className="py-24 bg-slate-50 border-t border-slate-200">
+  <section id="pricing" className="py-24 bg-gray-200 border-t border-gray-300">
     <div className="max-w-4xl mx-auto px-4 text-center">
-      <h2 className="text-4xl font-black text-slate-900 uppercase mb-6">Hinnoittelu</h2>
-      <p className="text-xl text-slate-600 mb-12">
+      <h2 className="text-4xl font-black text-gray-900 uppercase mb-6">Hinnoittelu</h2>
+      <p className="text-xl text-gray-700 mb-12">
         Reilu peli, ei piilokuluja. Hinnoittelu perustuu sopimuksen mukaan joko urakka- tai tuntihinnoitteluun.
       </p>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-green-500/50 transition-colors shadow-sm">
-           <h3 className="text-2xl font-bold text-slate-900 uppercase mb-4">Urakka</h3>
-           <p className="text-slate-500 mb-6">Sopii kohteisiin, joissa sisältö ja laajuus on tarkasti tiedossa etukäteen.</p>
-           <div className="text-green-600 font-bold uppercase tracking-wider text-sm">Kiinteä hinta</div>
+        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-300 hover:border-red-500/50 transition-colors shadow-sm">
+           <h3 className="text-2xl font-bold text-gray-900 uppercase mb-4">Urakka</h3>
+           <p className="text-gray-600 mb-6">Sopii kohteisiin, joissa sisältö ja laajuus on tarkasti tiedossa etukäteen.</p>
+           <div className="text-red-600 font-bold uppercase tracking-wider text-sm">Kiinteä hinta</div>
         </div>
-        <div className="bg-white p-8 rounded-2xl border border-slate-200 hover:border-green-500/50 transition-colors shadow-sm">
-           <h3 className="text-2xl font-bold text-slate-900 uppercase mb-4">Tuntityö</h3>
-           <p className="text-slate-500 mb-6">Joustava malli saneerauskohteisiin tai muutostöihin.</p>
-           <div className="text-green-600 font-bold uppercase tracking-wider text-sm">Tuntiveloitus</div>
+        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-300 hover:border-red-500/50 transition-colors shadow-sm">
+           <h3 className="text-2xl font-bold text-gray-900 uppercase mb-4">Tuntityö</h3>
+           <p className="text-gray-600 mb-6">Joustava malli saneerauskohteisiin tai muutostöihin.</p>
+           <div className="text-red-600 font-bold uppercase tracking-wider text-sm">Tuntiveloitus</div>
         </div>
       </div>
 
-      <div className="mt-12 p-6 bg-white rounded-lg inline-block shadow-sm border border-slate-100">
-         <p className="text-slate-900 font-bold mb-2">Suosimme sähköistä laskutusta</p>
-         <p className="text-slate-500 text-sm">Se on nopeaa, varmaa ja ympäristöystävällistä.</p>
+      <div className="mt-12 p-6 bg-gray-50 rounded-lg inline-block shadow-sm border border-gray-200">
+         <p className="text-gray-900 font-bold mb-2">Suosimme sähköistä laskutusta</p>
+         <p className="text-gray-600 text-sm">Se on nopeaa, varmaa ja ympäristöystävällistä.</p>
       </div>
     </div>
   </section>
 );
 
 const ContactSection = () => (
-  <section id="contact" className="py-24 bg-green-50 relative">
+  <section id="contact" className="py-24 bg-gray-300 relative">
     {/* Texture overlay */}
     <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
     
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div className="bg-white rounded-2xl shadow-xl overflow-hidden p-12 border border-slate-100">
+      <div className="bg-gray-50 rounded-2xl shadow-xl overflow-hidden p-12 border border-gray-200">
         
         <div className="text-center mb-12">
-           <h2 className="text-3xl font-black text-slate-900 uppercase mb-2">Ota yhteyttä</h2>
-           <p className="text-slate-500">Vastaamme tiedusteluihin nopeasti.</p>
+           <h2 className="text-3xl font-black text-gray-900 uppercase mb-2">Ota yhteyttä</h2>
+           <p className="text-gray-600">Vastaamme tiedusteluihin nopeasti.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center text-center border border-slate-200 hover:border-green-500/50 transition-colors">
-               <div className="bg-green-100 p-4 rounded-full mb-4">
-                  <Phone className="text-green-600 w-8 h-8" />
+            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-100 p-4 rounded-full mb-4">
+                  <Phone className="text-red-600 w-8 h-8" />
                </div>
-               <div className="text-xs text-slate-500 uppercase font-bold mb-1">Soita meille</div>
-               <div className="text-slate-900 text-xl font-bold mb-1">040 123 4567</div>
-               <div className="text-slate-500 text-sm">Juha Aarnilampi</div>
+               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Soita meille</div>
+               <div className="text-gray-900 text-xl font-bold mb-1">040 123 4567</div>
+               <div className="text-gray-600 text-sm">Juha Aarnilampi</div>
             </div>
 
-            <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center text-center border border-slate-200 hover:border-green-500/50 transition-colors">
-               <div className="bg-green-100 p-4 rounded-full mb-4">
-                  <Mail className="text-green-600 w-8 h-8" />
+            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-100 p-4 rounded-full mb-4">
+                  <Mail className="text-red-600 w-8 h-8" />
                </div>
-               <div className="text-xs text-slate-500 uppercase font-bold mb-1">Lähetä sähköpostia</div>
-               <div className="text-slate-900 font-medium mb-1">info@lambardos.fi</div>
-               <div className="text-slate-500 text-xs break-all">etunimi.sukunimi@lambardos.fi</div>
+               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Lähetä sähköpostia</div>
+               <div className="text-gray-900 font-medium mb-1">info@lambardos.fi</div>
+               <div className="text-gray-600 text-xs break-all">etunimi.sukunimi@lambardos.fi</div>
             </div>
 
-            <div className="bg-slate-50 rounded-lg p-6 flex flex-col items-center text-center border border-slate-200 hover:border-green-500/50 transition-colors">
-               <div className="bg-green-100 p-4 rounded-full mb-4">
-                  <MapPin className="text-green-600 w-8 h-8" />
+            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-100 p-4 rounded-full mb-4">
+                  <MapPin className="text-red-600 w-8 h-8" />
                </div>
-               <div className="text-xs text-slate-500 uppercase font-bold mb-1">Tule käymään</div>
-               <div className="text-slate-900 font-medium mb-1">Mäensyrjä 10</div>
-               <div className="text-slate-500 text-sm">01900 Nurmijärvi</div>
+               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Tule käymään</div>
+               <div className="text-gray-900 font-medium mb-1">Mäensyrjä 10</div>
+               <div className="text-gray-600 text-sm">01900 Nurmijärvi</div>
             </div>
         </div>
 
@@ -940,18 +940,18 @@ const ContactSection = () => (
 );
 
 const Footer = ({ hasFloatingNav }: { hasFloatingNav: boolean }) => (
-  <footer className={`bg-slate-50 border-t border-slate-200 py-12 text-center text-slate-500 text-sm rounded-t-[3rem] mx-auto mt-[-2rem] relative z-20 transition-all duration-300 ${hasFloatingNav ? 'pb-32' : 'pb-12'}`}>
+  <footer className={`bg-gray-200 border-t border-gray-300 py-12 text-center text-gray-600 text-sm rounded-t-[3rem] mx-auto mt-[-2rem] relative z-20 transition-all duration-300 ${hasFloatingNav ? 'pb-32' : 'pb-12'}`}>
     <div className="flex justify-center mb-4 opacity-80 hover:opacity-100 transition-opacity">
        <Logo />
     </div>
     <p className="mb-4">Rakennusliike Lambardos Oy - Laadukasta kalusteasennusta jo vuodesta 2011.</p>
     <div className="flex justify-center gap-4">
-       <Link to="/tietosuoja" className="hover:text-green-600">Tietosuojalauseke</Link>
+       <Link to="/tietosuoja" className="hover:text-red-600">Tietosuojalauseke</Link>
        <span>|</span>
-       <Link to="/laskutus" className="hover:text-green-600">Laskutustiedot</Link>
+       <Link to="/laskutus" className="hover:text-red-600">Laskutustiedot</Link>
     </div>
-    <p className="mt-8 text-xs text-slate-400">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
-    <p className="mt-4 text-xs text-green-300/60">Ajattelevat sivut By Feim</p>
+    <p className="mt-8 text-xs text-gray-500">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
+    <p className="mt-4 text-xs text-red-300/60">Ajattelevat sivut By Feim</p>
   </footer>
 );
 
@@ -977,7 +977,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-green-500 selection:text-white overflow-x-hidden relative">
+    <div className="min-h-screen bg-gray-100 font-sans text-gray-900 selection:bg-red-500 selection:text-white overflow-x-hidden relative">
       <Navbar />
       <HeroSection />
       
