@@ -770,7 +770,7 @@ const GameSection = () => {
     <section 
       className="py-16 md:py-24 flex flex-col items-center justify-center relative overflow-hidden"
       style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #f5f5f550 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #dc262640 0%, transparent 50%), linear-gradient(180deg, #f5f5f5 0%, #dc2626 50%, #f5f5f5 100%)",
+        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #f5f5f550 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #1a1a1a40 0%, transparent 50%), linear-gradient(180deg, #f5f5f5 0%, #1a1a1a 50%, #f5f5f5 100%)",
         filter: "brightness(1)",
       }}
     >
