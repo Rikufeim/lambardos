@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useContext, createContext } from 'react';
-import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield } from 'lucide-react';
+import { Menu, X, Phone, Mail, MapPin, Hammer, CheckCircle, AlertTriangle, FileText, ChevronRight, Wrench, Ruler, User, Square, ArrowDown, Home, BookOpen, Calculator, Contact, MessageCircle, Shield, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import FollowingPointerDemo from "@/components/following-pointer-demo";
 import { FollowerPointerCard } from "@/components/ui/following-pointer";
@@ -516,11 +516,7 @@ const HeroParallax = () => {
 
   return (
     <div
-      className="relative overflow-hidden antialiased py-16 md:py-24"
-      style={{ 
-        background: "radial-gradient(circle at 30% 70%, #f5f5f570 0%, transparent 45%), radial-gradient(circle at 70% 30%, #dc262670 0%, transparent 45%), linear-gradient(0deg, #f5f5f5 0%, #dc2626 50%, #f5f5f5 100%)",
-        filter: "brightness(1.1)",
-      }}
+      className="relative overflow-hidden antialiased pt-16 md:pt-24 pb-0"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -594,8 +590,9 @@ const Navbar = () => {
 
   const navLinks = [
     { label: "Etusivu", to: "#hero", icon: Home },
-    { label: "Laskutus", to: "/laskutus", icon: FileText },
-    { label: "Tietosuoja", to: "/tietosuoja", icon: Shield },
+    { label: "Projektinhallinta", to: "#project", icon: Settings },
+    { label: "Hinnoittelu", to: "#pricing", icon: Calculator },
+    { label: "Yhteystiedot", to: "#contact", icon: Contact },
   ];
 
   const handleNav = (to: string) => {
@@ -614,7 +611,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-40 transition-all duration-300 bg-gray-100/90 backdrop-blur-md border-b border-gray-300">
+    <nav className="sticky top-0 z-40 transition-all duration-300 backdrop-blur-md border-b border-gray-300" style={{ backgroundColor: 'rgba(245, 246, 248, 0.9)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div onClick={() => handleNav("#hero")}>
@@ -653,7 +650,7 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-gray-100 border-t border-gray-300">
+        <div className="md:hidden border-t border-gray-300" style={{ backgroundColor: '#F5F6F8' }}>
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <button
@@ -673,78 +670,64 @@ const Navbar = () => {
 };
 
 const HeroSection = () => {
-  const heroCtas = [
-    { id: "project", label: "Projektinhallinta" },
-    { id: "pricing", label: "Hinnoittelu" },
-    { id: "contact", label: "Yhteystiedot" },
-  ];
-
-  const jumpTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: "auto", block: "start" });
-    }
-  };
-
   return (
-    // Wrapper luomaan taustan kortin alle.
-    <div
-      className="w-full pb-12 pt-24 sm:pt-28"
-      style={{
-        background:
-          "linear-gradient(180deg, #dc2626 0%, #f5f5f5 30%), radial-gradient(ellipse 200% 100% at 50% 100%, #f5f5f570 0%, transparent 50%), radial-gradient(ellipse 150% 80% at 50% 120%, #1a1a1a60 0%, transparent 40%)",
-        filter: "brightness(1.1)",
-        width: "100%",
-        minHeight: "100vh",
-      }}
-    >
+    <>
     <section 
       id="hero" 
-      // Changed min-h-[40rem] to min-h-[35rem] and justify-center to justify-start to move content up
-      className="min-h-[35rem] rounded-[2.5rem] flex flex-col items-start justify-start bg-gray-100 antialiased relative overflow-visible border border-gray-300 shadow-xl w-full"
+      className="min-h-[35rem] rounded-t-[2.5rem] flex flex-col items-start justify-start antialiased relative overflow-hidden border-t border-l border-r border-gray-300 shadow-xl"
+      style={{
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
+      }}
     >
-      <Spotlight fill="black" fillOpacity={0.05} />
-      
-      {/* Punainen sävy vasemmassa yläkulmassa */}
-      <div className="absolute top-0 left-0 w-[600px] h-[600px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none -translate-x-1/3 -translate-y-1/3 z-0"></div>
-
-      <div className="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-gray-100 via-gray-100/80 to-transparent z-10 pointer-events-none"></div>
-
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-30 flex justify-center w-full px-6">
-        <div className="rounded-2xl bg-gray-900/95 text-white shadow-xl shadow-gray-900/15 border border-red-500/30 backdrop-blur-sm px-5 py-3.5 flex items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm font-semibold tracking-wide max-w-lg w-full">
-          {heroCtas.map((item, idx) => (
-            <React.Fragment key={item.id}>
-              <button
-                type="button"
-                onClick={() => jumpTo(item.id)}
-                className="transition-colors hover:text-red-400 focus:outline-none"
-              >
-                {item.label}
-              </button>
-              {idx < heroCtas.length - 1 && (
-                <span className="opacity-70 text-red-500/80">•</span>
-              )}
-            </React.Fragment>
-          ))}
-        </div>
+      {/* Layer 1: Black background (replaces image) */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute top-0 left-0 w-full h-[70%]"
+          style={{
+            backgroundColor: "#000000",
+          }}
+        />
       </div>
+
+      {/* Layer 2: Dark diagonal overlay */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.65)",
+          clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 75%)",
+        }}
+      />
+
+      {/* Layer 3: Solid red lower section inside hero card */}
+      <div
+        className="absolute bottom-0 left-0 w-full z-5"
+        style={{
+          backgroundColor: "#8E0F1A",
+          height: "30%",
+        }}
+      />
 
       {/* Content - Changed flex alignment and padding */}
       <div className="p-8 md:p-12 max-w-7xl mx-auto relative z-20 w-full flex flex-col items-start justify-start text-left pt-20 md:pt-32">
         
-        <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+        <h1 className="text-3xl md:text-5xl font-bold text-white leading-tight">
           Ammattilaisen kädenjälki <br />
           <span className="text-red-600 relative z-10">näkyy lopputuloksessa.</span>
         </h1>
         
-        <p className="text-gray-700 text-lg max-w-md leading-relaxed mt-6">
+        <p className="text-white text-lg max-w-md leading-relaxed mt-6">
            Toteutamme keittiö-, wc- ja komerokalusteiden asennukset uudis- ja perusparannuskohteisiin.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-start items-center mt-10">
           <button 
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            className="px-8 py-4 bg-gray-900 hover:bg-red-600 text-white font-bold rounded-[4px] transition-all duration-300 hover:scale-105 hover:shadow-md flex items-center gap-2 group shadow-lg border border-red-600"
+            className="px-8 py-4 bg-black hover:bg-red-600 text-white font-bold rounded-lg transition-all duration-300 hover:scale-105 hover:shadow-md flex items-center gap-2 group shadow-lg"
           >
             Pyydä tarjous
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
@@ -752,80 +735,167 @@ const HeroSection = () => {
           
           <button
              onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-             className="flex items-center gap-2 px-6 py-4 text-gray-900 font-medium hover:text-red-600 transition-colors"
+             className="flex items-center gap-2 px-6 py-4 text-white font-medium hover:text-red-300 transition-colors"
           >
-             <CheckCircle className="text-gray-900" size={20} />
+             <CheckCircle className="text-white" size={20} />
              <span>Lue lisää meistä</span>
           </button>
         </div>
       </div>
     </section>
-  </div>
+    {/* Solid red section extending full width below hero */}
+    <div
+      className="relative"
+      style={{
+        backgroundColor: "#8E0F1A",
+        height: "calc(35rem * 0.30)",
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
+      }}
+    />
+    </>
   );
 };
 
 // --- NEW GAME SECTION ---
 const GameSection = () => {
   return (
+    <>
     <section 
-      className="py-16 md:py-24 flex flex-col items-center justify-center relative overflow-hidden"
+      className="pt-0 pb-24 flex flex-col items-center justify-center relative overflow-visible min-h-[35rem]"
       style={{
-        background: "radial-gradient(ellipse 80% 60% at 50% 30%, #f5f5f550 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 50% 30%, #1a1a1a40 0%, transparent 50%), linear-gradient(180deg, #f5f5f5 0%, #1a1a1a 50%, #f5f5f5 100%)",
-        filter: "brightness(1)",
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
       }}
     >
+      {/* Layer 1: Red background (top portion) - MIRRORED */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute top-0 left-0 w-full h-[50%]"
+          style={{
+            backgroundColor: "#8E0F1A",
+          }}
+        />
+      </div>
 
-       <div className="text-center mb-8 md:mb-12 px-4 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Miksi valita ammattilainen?</h2>
-          <p className="text-gray-700 max-w-xl mx-auto">Koska tee-se-itse -projekteissa yllätykset ovat harvoin positiivisia. Me hoidamme homman kerralla maaliin.</p>
-       </div>
-       
-       <div className="w-full max-w-5xl mx-auto px-4 relative z-10">
-         <div className="bg-gray-50 rounded-2xl border border-gray-300 shadow-xl overflow-hidden">
-           <div className="text-xl font-bold text-gray-900 py-4 px-6 text-center border-b border-gray-200 bg-gray-100">
-             Meille ei käy näin
-           </div>
-           
-           <div className="w-full">
-             <CabinetFallGame 
-               allowReplay={true} 
-               buttonText="Kokeile asennusta"
-             />
-           </div>
-           
-           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 p-6 bg-gray-100 border-t border-gray-200">
-             <p className="text-gray-600 text-sm text-center sm:text-left">
-                Vältä turha säätö, päänvaiva ja kaatuvat kaapit.
-             </p>
-             <button 
-               className="px-6 py-3 rounded-lg bg-gray-900 text-white text-sm font-bold hover:bg-red-600 transition-colors whitespace-nowrap border border-red-600" 
-               onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-             >
-               Ota yhteyttä
-             </button>
-           </div>
-         </div>
+      {/* Layer 2: Dark diagonal overlay - MIRRORED */}
+      <div
+        className="absolute inset-0 z-10"
+        style={{
+          backgroundColor: "rgba(0, 0, 0, 0.65)",
+          clipPath: "polygon(0 40%, 100% 0, 100% 100%, 0 100%)",
+        }}
+      />
+
+      {/* Layer 3: Black lower section - MIRRORED */}
+      <div
+        className="absolute bottom-0 left-0 w-full z-5"
+        style={{
+          backgroundColor: "#000000",
+          height: "50%",
+        }}
+      />
+
+       <div 
+         className="w-full max-w-5xl mx-auto px-4 relative z-20"
+         style={{
+           transform: 'rotate(-22deg) translateX(10%) translateY(-25%)',
+           transformOrigin: 'center center',
+           display: 'flex',
+           flexDirection: 'column',
+           paddingTop: '5%',
+           paddingBottom: '5%',
+           overflow: 'visible',
+         }}
+       >
+         <CabinetFallGame 
+           allowReplay={true} 
+           buttonText="Kokeile asennusta"
+         />
        </div>
     </section>
+  </>
   )
 }
 
 const AboutSection = () => {
   return (
-    <section id="about" className="relative">
-      <HeroParallax />
+    <section 
+      id="about" 
+      className="relative min-h-[35rem] pt-16 md:pt-24 pb-0"
+      style={{
+        width: "100vw",
+        position: "relative",
+        left: "50%",
+        right: "50%",
+        marginLeft: "-50vw",
+        marginRight: "-50vw",
+        backgroundColor: "#F5F6F8",
+      }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+        <HeroParallax />
+      </div>
     </section>
   );
 };
 
 const ProjectSection = () => (
-  <section id="project" className="py-24 bg-gray-100">
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* Header */}
-      <div className="text-center mb-12">
-        <h2 className="text-3xl md:text-5xl font-black text-gray-900 uppercase mb-4">Moderni <span className="text-red-600">Projektinhallinta</span></h2>
-        <p className="text-lg text-gray-700 max-w-2xl mx-auto">
-          Käytämme <span className="text-gray-900 font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä.
+  <>
+  <section 
+    id="project" 
+    className="py-24 min-h-[35rem] relative overflow-hidden"
+    style={{
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  >
+    {/* Layer 1: Red background (top portion) - MIRRORED */}
+    <div className="absolute inset-0 z-0">
+      <div
+        className="absolute top-0 left-0 w-full h-[30%]"
+        style={{
+          backgroundColor: "#8E0F1A",
+        }}
+      />
+    </div>
+
+    {/* Layer 2: Dark diagonal overlay - MIRRORED */}
+    <div
+      className="absolute inset-0 z-10"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.65)",
+        clipPath: "polygon(0 25%, 100% 0, 100% 100%, 0 100%)",
+      }}
+    />
+
+    {/* Layer 3: Black lower section - MIRRORED */}
+    <div
+      className="absolute bottom-0 left-0 w-full z-5"
+      style={{
+        backgroundColor: "#000000",
+        height: "70%",
+      }}
+    />
+
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      {/* Header - moved higher */}
+      <div className="text-center mb-12 pt-12 md:pt-16">
+        <h2 className="text-3xl md:text-5xl font-black text-white uppercase mb-4">Moderni <span className="text-red-600">Projektinhallinta</span></h2>
+        <p className="text-lg text-white max-w-2xl mx-auto">
+          Käytämme <span className="text-white font-bold">LÄHDE Solutionsin</span> projektinhallintajärjestelmää. Se takaa, että tieto kulkee ja vasara pysyy kädessä.
         </p>
       </div>
 
@@ -843,8 +913,8 @@ const ProjectSection = () => (
                        <CheckCircle className="text-white" />
                     </div>
                     <div>
-                       <h4 className="text-gray-900 font-bold text-lg">{item.title}</h4>
-                       <p className="text-gray-600">{item.desc}</p>
+                       <h4 className="text-white font-bold text-lg">{item.title}</h4>
+                       <p className="text-white/80">{item.desc}</p>
                     </div>
                  </li>
                ))}
@@ -853,7 +923,6 @@ const ProjectSection = () => (
 
          {/* Right - Card */}
          <div className="relative flex justify-center">
-            <div className="absolute inset-0 bg-red-100 blur-3xl opacity-40 rounded-full"></div>
             <div className="relative w-full">
                <FollowingPointerDemo />
             </div>
@@ -861,97 +930,232 @@ const ProjectSection = () => (
       </div>
     </div>
   </section>
+  {/* Solid black section extending full width below section */}
+  <div
+    className="relative"
+    style={{
+      backgroundColor: "#000000",
+      height: "calc(35rem * 0.70)",
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  />
+  </>
 );
 
 const PricingSection = () => (
-  <section id="pricing" className="py-24 bg-gray-200 border-t border-gray-300">
-    <div className="max-w-4xl mx-auto px-4 text-center">
-      <h2 className="text-4xl font-black text-gray-900 uppercase mb-6">Hinnoittelu</h2>
-      <p className="text-xl text-gray-700 mb-12">
+  <>
+  <section 
+    id="pricing" 
+    className="py-24 min-h-[35rem] relative overflow-hidden"
+    style={{
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  >
+    {/* Layer 1: Black background (top portion) */}
+    <div className="absolute inset-0 z-0">
+      <div
+        className="absolute top-0 left-0 w-full h-[70%]"
+        style={{
+          backgroundColor: "#000000",
+        }}
+      />
+    </div>
+
+    {/* Layer 2: Dark diagonal overlay */}
+    <div
+      className="absolute inset-0 z-10"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.65)",
+        clipPath: "polygon(0 0, 100% 0, 100% 50%, 0 75%)",
+      }}
+    />
+
+    {/* Layer 3: Red lower section */}
+    <div
+      className="absolute bottom-0 left-0 w-full z-5"
+      style={{
+        backgroundColor: "#8E0F1A",
+        height: "30%",
+      }}
+    />
+
+    <div className="max-w-4xl mx-auto px-4 text-center relative z-20">
+      <h2 className="text-4xl font-black text-white uppercase mb-6">Hinnoittelu</h2>
+      <p className="text-xl text-white mb-12">
         Reilu peli, ei piilokuluja. Hinnoittelu perustuu sopimuksen mukaan joko urakka- tai tuntihinnoitteluun.
       </p>
 
       <div className="grid md:grid-cols-2 gap-8">
-        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-300 hover:border-red-500/50 transition-colors shadow-sm">
-           <h3 className="text-2xl font-bold text-gray-900 uppercase mb-4">Urakka</h3>
-           <p className="text-gray-600 mb-6">Sopii kohteisiin, joissa sisältö ja laajuus on tarkasti tiedossa etukäteen.</p>
+        <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 hover:border-red-500/50 transition-colors shadow-sm">
+           <h3 className="text-2xl font-bold text-white uppercase mb-4">Urakka</h3>
+           <p className="text-white/80 mb-6">Sopii kohteisiin, joissa sisältö ja laajuus on tarkasti tiedossa etukäteen.</p>
            <div className="text-red-600 font-bold uppercase tracking-wider text-sm">Kiinteä hinta</div>
         </div>
-        <div className="bg-gray-50 p-8 rounded-2xl border border-gray-300 hover:border-red-500/50 transition-colors shadow-sm">
-           <h3 className="text-2xl font-bold text-gray-900 uppercase mb-4">Tuntityö</h3>
-           <p className="text-gray-600 mb-6">Joustava malli saneerauskohteisiin tai muutostöihin.</p>
+        <div className="bg-white/10 backdrop-blur-sm p-8 rounded-2xl border border-white/20 hover:border-red-500/50 transition-colors shadow-sm">
+           <h3 className="text-2xl font-bold text-white uppercase mb-4">Tuntityö</h3>
+           <p className="text-white/80 mb-6">Joustava malli saneerauskohteisiin tai muutostöihin.</p>
            <div className="text-red-600 font-bold uppercase tracking-wider text-sm">Tuntiveloitus</div>
         </div>
       </div>
 
-      <div className="mt-12 p-6 bg-gray-50 rounded-lg inline-block shadow-sm border border-gray-200">
-         <p className="text-gray-900 font-bold mb-2">Suosimme sähköistä laskutusta</p>
-         <p className="text-gray-600 text-sm">Se on nopeaa, varmaa ja ympäristöystävällistä.</p>
+      <div className="mt-12 p-6 bg-white/10 backdrop-blur-sm rounded-lg inline-block shadow-sm border border-white/20">
+         <p className="text-white font-bold mb-2">Suosimme sähköistä laskutusta</p>
+         <p className="text-white/80 text-sm">Se on nopeaa, varmaa ja ympäristöystävällistä.</p>
       </div>
     </div>
   </section>
+  {/* Solid red section extending full width below section */}
+  <div
+    className="relative"
+    style={{
+      backgroundColor: "#8E0F1A",
+      height: "calc(35rem * 0.30)",
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  />
+  </>
 );
 
 const ContactSection = () => (
-  <section id="contact" className="py-24 bg-gray-300 relative">
-    {/* Texture overlay */}
-    <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/wood-pattern.png')]"></div>
+  <>
+  <section 
+    id="contact" 
+    className="py-24 min-h-[35rem] relative overflow-hidden"
+    style={{
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  >
+    {/* Layer 1: Red background (top portion) - MIRRORED */}
+    <div className="absolute inset-0 z-0">
+      <div
+        className="absolute top-0 left-0 w-full h-[30%]"
+        style={{
+          backgroundColor: "#8E0F1A",
+        }}
+      />
+    </div>
+
+    {/* Layer 2: Dark diagonal overlay - MIRRORED */}
+    <div
+      className="absolute inset-0 z-10"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.65)",
+        clipPath: "polygon(0 25%, 100% 0, 100% 100%, 0 100%)",
+      }}
+    />
+
+    {/* Layer 3: Black lower section - MIRRORED */}
+    <div
+      className="absolute bottom-0 left-0 w-full z-5"
+      style={{
+        backgroundColor: "#000000",
+        height: "70%",
+      }}
+    />
     
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div className="bg-gray-50 rounded-2xl shadow-xl overflow-hidden p-12 border border-gray-200">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-20">
+      <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden p-12 border border-white/20">
         
         <div className="text-center mb-12">
-           <h2 className="text-3xl font-black text-gray-900 uppercase mb-2">Ota yhteyttä</h2>
-           <p className="text-gray-600">Vastaamme tiedusteluihin nopeasti.</p>
+           <h2 className="text-3xl font-black text-white uppercase mb-2">Ota yhteyttä</h2>
+           <p className="text-white/80">Vastaamme tiedusteluihin nopeasti.</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
-               <div className="bg-red-100 p-4 rounded-full mb-4">
-                  <Phone className="text-red-600 w-8 h-8" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center text-center border border-white/20 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-600/30 p-4 rounded-full mb-4">
+                  <Phone className="text-white w-8 h-8" />
                </div>
-               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Soita meille</div>
-               <div className="text-gray-900 text-xl font-bold mb-1">040 123 4567</div>
-               <div className="text-gray-600 text-sm">Juha Aarnilampi</div>
+               <div className="text-xs text-white/80 uppercase font-bold mb-1">Soita meille</div>
+               <div className="text-white text-xl font-bold mb-1">040 123 4567</div>
+               <div className="text-white/80 text-sm">Juha Aarnilampi</div>
             </div>
 
-            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
-               <div className="bg-red-100 p-4 rounded-full mb-4">
-                  <Mail className="text-red-600 w-8 h-8" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center text-center border border-white/20 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-600/30 p-4 rounded-full mb-4">
+                  <Mail className="text-white w-8 h-8" />
                </div>
-               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Lähetä sähköpostia</div>
-               <div className="text-gray-900 font-medium mb-1">info@lambardos.fi</div>
-               <div className="text-gray-600 text-xs break-all">etunimi.sukunimi@lambardos.fi</div>
+               <div className="text-xs text-white/80 uppercase font-bold mb-1">Lähetä sähköpostia</div>
+               <div className="text-white font-medium mb-1">info@lambardos.fi</div>
+               <div className="text-white/80 text-xs break-all">etunimi.sukunimi@lambardos.fi</div>
             </div>
 
-            <div className="bg-gray-100 rounded-lg p-6 flex flex-col items-center text-center border border-gray-300 hover:border-red-500/50 transition-colors">
-               <div className="bg-red-100 p-4 rounded-full mb-4">
-                  <MapPin className="text-red-600 w-8 h-8" />
+            <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 flex flex-col items-center text-center border border-white/20 hover:border-red-500/50 transition-colors">
+               <div className="bg-red-600/30 p-4 rounded-full mb-4">
+                  <MapPin className="text-white w-8 h-8" />
                </div>
-               <div className="text-xs text-gray-600 uppercase font-bold mb-1">Tule käymään</div>
-               <div className="text-gray-900 font-medium mb-1">Mäensyrjä 10</div>
-               <div className="text-gray-600 text-sm">01900 Nurmijärvi</div>
+               <div className="text-xs text-white/80 uppercase font-bold mb-1">Tule käymään</div>
+               <div className="text-white font-medium mb-1">Mäensyrjä 10</div>
+               <div className="text-white/80 text-sm">01900 Nurmijärvi</div>
             </div>
         </div>
 
       </div>
     </div>
   </section>
+  {/* Solid black section extending full width below section */}
+  <div
+    className="relative"
+    style={{
+      backgroundColor: "#000000",
+      height: "calc(35rem * 0.70)",
+      width: "100vw",
+      position: "relative",
+      left: "50%",
+      right: "50%",
+      marginLeft: "-50vw",
+      marginRight: "-50vw",
+    }}
+  />
+  </>
 );
 
 const Footer = ({ hasFloatingNav }: { hasFloatingNav: boolean }) => (
-  <footer className={`bg-gray-200 border-t border-gray-300 py-12 text-center text-gray-600 text-sm rounded-t-[3rem] mx-auto mt-[-2rem] relative z-20 transition-all duration-300 ${hasFloatingNav ? 'pb-32' : 'pb-12'}`}>
+  <footer 
+    className={`border-t border-gray-300 py-12 text-center text-sm rounded-t-[3rem] mx-auto mt-[-2rem] relative z-20 transition-all duration-300 ${hasFloatingNav ? 'pb-32' : 'pb-12'}`}
+    style={{
+      background: "radial-gradient(ellipse at 20% 80%, #00000050 0%, transparent 40%), radial-gradient(ellipse at 80% 20%, #a2000050 0%, transparent 40%), radial-gradient(ellipse at 50% 50%, #00000030 0%, transparent 60%), radial-gradient(circle at 30% 30%, #00000030 0%, transparent 30%), radial-gradient(circle at 70% 70%, #a2000030 0%, transparent 30%), #000000",
+      filter: "brightness(0.6)",
+      width: "100%",
+    }}
+  >
     <div className="flex justify-center mb-4 opacity-80 hover:opacity-100 transition-opacity">
        <Logo />
     </div>
-    <p className="mb-4">Rakennusliike Lambardos Oy - Laadukasta kalusteasennusta jo vuodesta 2011.</p>
-    <div className="flex justify-center gap-4">
-       <Link to="/tietosuoja" className="hover:text-red-600">Tietosuojalauseke</Link>
-       <span>|</span>
-       <Link to="/laskutus" className="hover:text-red-600">Laskutustiedot</Link>
+    <p className="mb-4 text-white">Rakennusliike Lambardos Oy - Laadukasta kalusteasennusta jo vuodesta 2011.</p>
+    <div className="flex justify-center gap-4 items-center flex-wrap">
+       <Link to="/laskutus" className="hover:text-red-400 text-white flex items-center gap-1">
+         <FileText size={14} />
+         Laskutus
+       </Link>
+       <span className="text-white/60">|</span>
+       <Link to="/tietosuoja" className="hover:text-red-400 text-white flex items-center gap-1">
+         <Shield size={14} />
+         Tietosuoja
+       </Link>
     </div>
-    <p className="mt-8 text-xs text-gray-500">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
-    <p className="mt-4 text-xs text-red-300/60">Ajattelevat sivut By Feim</p>
+    <p className="mt-8 text-xs text-white/60">© {new Date().getFullYear()} Rakennusliike Lambardos Oy</p>
+    <p className="mt-4 text-xs text-red-400/60">Ajattelevat sivut By Feim</p>
   </footer>
 );
 
@@ -977,7 +1181,7 @@ const Index = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 font-sans text-gray-900 selection:bg-red-500 selection:text-white overflow-x-hidden relative">
+    <div className="min-h-screen font-sans text-gray-900 selection:bg-red-500 selection:text-white overflow-x-hidden relative" style={{ backgroundColor: '#F5F6F8' }}>
       <Navbar />
       <HeroSection />
       

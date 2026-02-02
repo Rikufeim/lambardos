@@ -8,8 +8,8 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Vaalean harmaa tausta (logon mukaisesti) */
-    --background: 0 0% 96%;
+    /* Vaalean harmaa tausta (logon mukaisesti) - Updated to #F5F6F8 */
+    --background: 216 20% 97%;
     --foreground: 0 0% 10%;
 
     --card: 0 0% 98%;
